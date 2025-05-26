@@ -48,6 +48,7 @@ router.beforeEach((to, from, next) => {
     const isTokenNotValid = isTokenExpired(localStorage.getItem('token'))
     if(isTokenNotValid){
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
     }
   }
   const isLoggedIn = !!localStorage.getItem('token'); // atau ambil dari store
@@ -63,6 +64,10 @@ router.beforeEach((to, from, next) => {
 const  isTokenExpired = (token)=>{
   try {
     const decoded = jwtDecode(token);
+    const user = {}
+    user.nama = decoded.nama
+    user.role = decoded.role
+    localStorage.setItem('user', JSON.stringify(user))
     const currentTime = Date.now() / 1000; // detik
     return decoded.exp < currentTime;
   } catch (e) {
