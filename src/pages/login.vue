@@ -19,10 +19,8 @@
                         :rules="userNameRules" rounded="lg" autocomplete="username"></v-text-field>
                     <v-text-field clearable label="Password" variant="outlined" v-model="password"
                         :rules="passwordRules" rounded="lg" autocomplete="current-password"
-                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                        :type="show1 ? 'text' : 'password'"
-                        @click:append="show1 = !show1"
-                        ></v-text-field>
+                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'"
+                        @click:append="show1 = !show1"></v-text-field>
                     <v-btn :loading="loading" class="mt-2" text="Masuk" type="submit" block rounded="lg"
                         color="indigo-darken-3"></v-btn>
                 </v-form>
@@ -35,6 +33,9 @@
 //
 import { ref } from 'vue'
 import axios from 'axios';
+
+//untuk API
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const show1 = ref(false)
 const loading = ref(false)
@@ -53,6 +54,10 @@ const passwordRules = [
     },
 ]
 const token = ref('');
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
 
 async function submit(event) {
     loading.value = true
@@ -60,14 +65,13 @@ async function submit(event) {
         const results = await event
         loading.value = false
         try {
-            const response = await axios.post('http://localhost:5000/login', {
+            const response = await axios.post(`${apiUrl}/login`, {
                 username: userName.value,
                 password: password.value
             });
-            console.log(token.value)
             token.value = response.data.token;
-            localStorage.setItem('jwt', token.value);  // Menyimpan token di localStorage
-            alert('Login successful');
+            localStorage.setItem('token', token.value);  // Menyimpan token di localStorage
+            router.push('/')
         } catch (error) {
             console.error('Login failed:', error.response.data);
         }

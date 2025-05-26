@@ -6,8 +6,8 @@
 
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
-
 import { routes } from 'vue-router/auto-routes'
+import {jwtDecode} from 'jwt-decode';
 
 //mengatur path require login
 const pathLogin = ['/','/data','/kegiatan','/pendataan']
@@ -44,6 +44,12 @@ router.isReady().then(() => {
 
 // Guard global
 router.beforeEach((to, from, next) => {
+  if(localStorage.getItem('token')){
+    const isTokenNotValid = isTokenExpired(localStorage.getItem('token'))
+    if(isTokenNotValid){
+      localStorage.removeItem('token');
+    }
+  }
   const isLoggedIn = !!localStorage.getItem('token'); // atau ambil dari store
   if (to.meta.requiresAuth && !isLoggedIn) {
     next('/login');
@@ -53,5 +59,15 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
+const  isTokenExpired = (token)=>{
+  try {
+    const decoded = jwtDecode(token);
+    const currentTime = Date.now() / 1000; // detik
+    return decoded.exp < currentTime;
+  } catch (e) {
+    return true; // token rusak → anggap expired
+  }
+}
 
 export default router
