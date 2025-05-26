@@ -16,9 +16,6 @@
                     <v-list-item>
                         <v-list-item-title>{{ user.nama }}</v-list-item-title>
                     </v-list-item>
-                    <v-list-item v-for="(role, index) in user.role" :key="index">
-                        <v-list-item-title>{{ role }}</v-list-item-title>
-                    </v-list-item>
                     <v-list-item>
                         <v-btn class="mt-2" text="Keluar" type="button" block rounded="lg" color="red-darken-3"
                             @click="logout()"></v-btn>
@@ -53,7 +50,7 @@ async function logout(event) {
         await axios.post(`${apiUrl}/logout`, {
             headers: {
                 Authorization: `Bearer ${token}`
-            }
+            },
         }).then(response => {
             if (response.data.code == 200) {
                 localStorage.removeItem('token');
