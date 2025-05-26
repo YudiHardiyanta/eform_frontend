@@ -58,7 +58,7 @@ async function logout(event) {
             if (response.data.code == 200) {
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
-                router.push('/')
+                router.push('/login')
             }
         });
 
