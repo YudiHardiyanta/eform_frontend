@@ -16,7 +16,7 @@
                 <v-sheet class="pa-2">
                   <v-text-field v-model="jumlahDesa" :rules="jumlahDesaRules" label="Jumlah Desa Adat" type="number"
                     clearable append-inner-icon="mdi-information-outline" variant="underlined"
-                    :disabled="mode == 'view'"></v-text-field>
+                    :disabled="mode == 'view'" :error="!!errorJumlahDesa" :error-messages="errorJumlahDesa"></v-text-field>
                   <div v-if="jumlahDesa > 0">
                     <span>Tuliskan nama desa adat</span>
                     <v-text-field v-for="(item, index) in listDesaAdat" :key="index" v-model="listDesaAdat[index]"
@@ -43,7 +43,7 @@
                 <v-sheet class="pa-2">
                   <v-text-field v-model="jumlahCagarBudaya" :rules="jumlahCagarBudayaRules" label="Jumlah Cagar Budaya"
                     type="number" clearable append-inner-icon="mdi-information-outline" variant="underlined"
-                    :disabled="mode == 'view'"></v-text-field>
+                    :disabled="mode == 'view'" :error="!!errorJumlahCagar" :error-messages="errorJumlahCagar"></v-text-field>
                   <div v-if="jumlahCagarBudaya > 0">
                     <span>Tuliskan nama cagar budaya</span>
                     <v-text-field v-for="(item, index) in listCagarBudaya" :key="index" v-model="listCagarBudaya[index]"
@@ -96,6 +96,8 @@ const id = route.query.id
 const form = ref()
 const desaDinas = ref('Desa Ubung Kaja')
 const jumlahDesa = ref('')
+const errorJumlahDesa = ref()
+const errorJumlahCagar = ref()
 const jumlahDesaRules = [
   value => {
     if (!value) return 'Jumlah Harus diisi'
@@ -191,7 +193,13 @@ const role = ref()
 
 const submit = async () => {
   await form.value.validate().then(async (result) => {
-    if (result.valid) {
+    if(jumlahDesa.value!=listDesaAdat.value.length){
+      errorJumlahDesa.value='Jumlah Desa Adat tidak sesuai dengan Daftar Desa Adat'
+    }
+    if(jumlahCagarBudaya.value!=listCagarBudaya.value.length){
+      errorJumlahDesa.value='Jumlah Cagar Budaya tidak sesuai dengan Daftar Cagar Budaya'
+    }
+    if (result.valid && (jumlahDesa.value==listDesaAdat.value.length) && (jumlahCagarBudaya.value==listCagarBudaya.value.length)) {
       params.value.status = 'submit'
       const data = {
         jml_da: jumlahDesa.value,
