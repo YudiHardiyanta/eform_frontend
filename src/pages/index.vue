@@ -4,7 +4,7 @@
     <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="6">
-          <v-card v-for="item in kegiatan" :key="item.id" append-icon="mdi-open-in-new" :href="'/pendataan?id=' + item.id"
+          <v-card v-for="item in kegiatan" :key="item.id" append-icon="mdi-open-in-new" :href="'/pendataan?id=' + item.kegiatan_id"
             prepend-icon="mdi-note-edit" rel="noopener" :subtitle="item.role + ' - 1 Juni - 30 Juni 2025'"
             :title="item.Kegiatan.nama" style="width: 100%;" color="indigo-darken-3"></v-card>
         </v-col>

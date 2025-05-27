@@ -56,13 +56,13 @@
             <v-row>
               <v-col cols="12" sm="4">
                 <v-btn class="pd-2" type="submit" block rounded="lg" color="indigo-darken-3"
-                  v-if="mode == 'edit'">Simpan</v-btn>
+                  v-if="(mode == 'edit' && role=='pencacah')">Simpan</v-btn>
               </v-col>
               <v-col cols="12" sm="4">
-                <v-btn class="pd-2" type="submit" block rounded="lg" color="teal-darken-3">Setujui</v-btn>
+                <v-btn class="pd-2" type="submit" block rounded="lg" color="teal-darken-3" v-if="(mode == 'edit' && role=='pengawas')">Setujui</v-btn>
               </v-col>
               <v-col cols="12" sm="4">
-                <v-btn class="pd-2" type="submit" block rounded="lg" color="red-darken-3">Tolak</v-btn>
+                <v-btn class="pd-2" type="submit" block rounded="lg" color="red-darken-3" v-if="(mode == 'edit' && role=='pengawas')">Tolak</v-btn>
               </v-col>
             </v-row>
           </v-container>
@@ -181,6 +181,7 @@ watch(jumlahCagarBudaya, (newValue, oldValue) => {
 
 // trigger data
 const params = ref({ id: id })
+const role = ref()
 onMounted(async () => {
   try {
     await axios.get(`${apiUrl}/data`, {
@@ -190,7 +191,8 @@ onMounted(async () => {
       params: params.value
     }).then(response => {
       desaDinas.value=response.data.data.MDesa.nama
-      
+      console.log(response.data.role)
+      role.value=response.data.role
     })
   } catch (error) {
     console.log(error)
