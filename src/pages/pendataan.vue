@@ -18,9 +18,11 @@
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <div class="d-flex ga-2 justify-end">
-                        <v-btn v-if="(item.status=='approve' && role=='pengawas') || (item.status=='reject' && role=='pencacah') || (item.status=='submit' && role=='pengawas') || (item.status=='draft' && role=='pencacah')" icon="mdi-pencil" size="x-small" :to="'/data?id=' + item.id + '&mode=edit'"></v-btn>
+                        <v-btn
+                            v-if="(item.status == 'approve' && role == 'pengawas') || (item.status == 'reject' && role == 'pencacah') || (item.status == 'submit' && role == 'pengawas') || (item.status == 'draft' && role == 'pencacah')"
+                            icon="mdi-pencil" size="x-small" :to="'/data?id=' + item.id + '&mode=edit'"></v-btn>
                         <v-btn icon="mdi-eye" size="x-small" :to="'/data?id=' + item.id + '&mode=view'"
-                            :color="item.status=='approve' ? 'teal-lighten-3' : item.status=='reject'? 'pink-lighten-3' : item.status=='submit'? 'blue-lighten-3': ''"></v-btn>
+                            :color="item.status == 'approve' ? 'teal-lighten-3' : item.status == 'reject' ? 'pink-lighten-3' : item.status == 'submit' ? 'blue-lighten-3' : ''"></v-btn>
                     </div>
                 </template>
 
@@ -65,102 +67,40 @@ const headers = [
 ]
 
 const params = ref({
-    id : 1
+    id: id
 })
 
 onMounted(async () => {
     try {
-        await axios.get(`${apiUrl}/sampel`,{
+        await axios.get(`${apiUrl}/sampel`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-            params : params.value
+            params: params.value
         }).then(response => {
-            console.log(response.data.data)
-            items.value = response.data.data 
+            items.value = response.data.data
             role.value = response.data.role
         })
     } catch (error) {
-
+        console.log(error)
     }
     //reset()
 })
 
-function reset() {
-    items.value = [
-        {
-            'id': '1',
-            'name': 'Kelurahan Ubung Kaja (001)',
-            'name_up': 'Denpasar Utara (031)',
-            'status': '1',
-        },
-        {
-            'id': '2',
-            'name': 'Kelurahan Ubung Kaja (001)',
-            'name_up': 'Denpasar Utara (031)',
-            'status': '1',
-        },
-        {
-            'id': '3',
-            'name': 'Kelurahan Ubung Kaja (001)',
-            'name_up': 'Denpasar Utara (031)',
-            'status': '1',
-        },
-        {
-            'id': '4',
-            'name': 'Kelurahan Ubung Kaja (001)',
-            'name_up': 'Denpasar Utara (031)',
-            'status': '2',
-        },
-        {
-            'id': '5',
-            'name': 'Kelurahan Ubung Kaja (001)',
-            'name_up': 'Denpasar Utara (031)',
-            'status': '2',
-        },
-        {
-            'id': '6',
-            'name': 'Kelurahan Ubung Kaja (001)',
-            'name_up': 'Denpasar Utara (031)',
-            'status': '2',
-        },
-        {
-            'id': '7',
-            'name': 'Kelurahan Ubung Kaja (001)',
-            'name_up': 'Denpasar Utara (031)',
-            'status': '2',
-        },
-        {
-            'id': '8',
-            'name': 'Kelurahan Ubung Kaja (001)',
-            'name_up': 'Denpasar Utara (031)',
-            'status': '3',
-        },
-        {
-            'id': '9',
-            'name': 'Kelurahan Ubung Kaja (001)',
-            'name_up': 'Denpasar Utara (031)',
-            'status': '3',
-        },
-        {
-            'id': '10',
-            'name': 'Kelurahan Ubung Kaja (001)',
-            'name_up': 'Denpasar Utara (031)',
-            'status': '3',
-        },
-        {
-            'id': '11',
-            'name': 'Kelurahan Ubung Kaja (001)',
-            'name_up': 'Denpasar Utara (031)',
-            'status': '4',
-        },
-        {
-            'id': '12',
-            'name': 'Kelurahan Ubung Kaja (001)',
-            'name_up': 'Denpasar Utara (031)',
-            'status': '4',
-        },
-    ]
+async function reset() {
+    try {
+        await axios.get(`${apiUrl}/sampel`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            params: params.value
+        }).then(response => {
+            items.value = response.data.data
+            role.value = response.data.role
+        })
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 </script>

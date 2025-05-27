@@ -15,49 +15,51 @@
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
                   <v-text-field v-model="jumlahDesa" :rules="jumlahDesaRules" label="Jumlah Desa Adat" type="number"
-                    clearable append-inner-icon="mdi-information-outline" variant="underlined" :disabled="mode=='view'"></v-text-field>
+                    clearable append-inner-icon="mdi-information-outline" variant="underlined"
+                    :disabled="mode == 'view'"></v-text-field>
                   <div v-if="jumlahDesa > 0">
                     <span>Tuliskan nama desa adat</span>
                     <v-text-field v-for="(item, index) in listDesaAdat" :key="index" v-model="listDesaAdat[index]"
                       :rules="[desaAdatRules]" label="Nama Desa Adat" append-icon="mdi-delete"
-                      @click:append="removeDesaAdat(index)" :disabled="mode=='view'"></v-text-field>
+                      @click:append="removeDesaAdat(index)" :disabled="mode == 'view'"></v-text-field>
                   </div>
                 </v-sheet>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
                   <v-text-field v-model="jumlahPelakuSeni" :rules="jumlahPelakuSeniRules" label="Jumlah Pelaku Seni"
-                    type="number" clearable append-inner-icon="mdi-information-outline"
-                    variant="underlined" :disabled="mode=='view'"></v-text-field>
+                    type="number" clearable append-inner-icon="mdi-information-outline" variant="underlined"
+                    :disabled="mode == 'view'"></v-text-field>
                 </v-sheet>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
                   <v-text-field v-model="jumlahSanggarSeni" :rules="jumlahSanggarSeniRules" label="Jumlah Sanggar Seni"
-                    type="number" clearable append-inner-icon="mdi-information-outline"
-                    variant="underlined" :disabled="mode=='view'"></v-text-field>
+                    type="number" clearable append-inner-icon="mdi-information-outline" variant="underlined"
+                    :disabled="mode == 'view'"></v-text-field>
                 </v-sheet>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
                   <v-text-field v-model="jumlahCagarBudaya" :rules="jumlahCagarBudayaRules" label="Jumlah Cagar Budaya"
-                    type="number" clearable append-inner-icon="mdi-information-outline"
-                    variant="underlined" :disabled="mode=='view'"></v-text-field>
+                    type="number" clearable append-inner-icon="mdi-information-outline" variant="underlined"
+                    :disabled="mode == 'view'"></v-text-field>
                   <div v-if="jumlahCagarBudaya > 0">
                     <span>Tuliskan nama cagar budaya</span>
                     <v-text-field v-for="(item, index) in listCagarBudaya" :key="index" v-model="listCagarBudaya[index]"
                       :rules="[cagarBudayaRules]" label="Nama Cagar Budaya" append-icon="mdi-delete"
-                      @click:append="removeCagarBudaya(index)" :disabled="mode=='view'"></v-text-field>
+                      @click:append="removeCagarBudaya(index)" :disabled="mode == 'view'"></v-text-field>
                   </div>
                 </v-sheet>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" sm="4">
-                <v-btn class="pd-2" type="submit" block rounded="lg" color="indigo-darken-3" v-if="mode=='edit'">Simpan</v-btn>
+                <v-btn class="pd-2" type="submit" block rounded="lg" color="indigo-darken-3"
+                  v-if="mode == 'edit'">Simpan</v-btn>
               </v-col>
               <v-col cols="12" sm="4">
-                <v-btn class="pd-2" type="submit" block rounded="lg" color="teal-darken-3" >Setujui</v-btn>
+                <v-btn class="pd-2" type="submit" block rounded="lg" color="teal-darken-3">Setujui</v-btn>
               </v-col>
               <v-col cols="12" sm="4">
                 <v-btn class="pd-2" type="submit" block rounded="lg" color="red-darken-3">Tolak</v-btn>
@@ -67,14 +69,20 @@
         </v-form>
       </v-sheet>
     </v-container>
-    
+
   </div>
 </template>
 
 <script setup>
 //
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router';
+
+import axios from 'axios';
+const apiUrl = import.meta.env.VITE_API_URL;
+const token = localStorage.getItem('token')
+const user = JSON.parse(localStorage.getItem('user'))
+
 
 const route = useRoute(); // Mengakses objek route saat ini
 const mode = route.query.mode
@@ -170,5 +178,26 @@ watch(jumlahCagarBudaya, (newValue, oldValue) => {
     }
   }
 });
+
+// trigger data
+const params = ref({ id: id })
+onMounted(async () => {
+  try {
+    await axios.get(`${apiUrl}/data`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: params.value
+    }).then(response => {
+      desaDinas.value=response.data.data.MDesa.nama
+      
+    })
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+
+
 
 </script>
