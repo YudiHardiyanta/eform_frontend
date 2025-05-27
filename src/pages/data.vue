@@ -3,7 +3,7 @@
     <AppMenuBar />
     <v-container>
       <v-sheet class="mx-auto">
-        <v-form fast-fail @submit.prevent>
+        <v-form fast-fail @submit.prevent ref="form">
           <v-container>
             <v-row no-gutters>
               <v-col cols="12" sm="6">
@@ -56,7 +56,7 @@
             <v-row>
               <v-col cols="12" sm="4">
                 <v-btn class="pd-2" type="submit" block rounded="lg" color="indigo-darken-3"
-                  v-if="(mode == 'edit' && role == 'pencacah')">Simpan</v-btn>
+                  v-if="(mode == 'edit' && role == 'pencacah')" @click="submit">Simpan</v-btn>
               </v-col>
             </v-row>
           </v-container>
@@ -81,8 +81,8 @@
 <script setup>
 //
 import { ref, watch, onMounted } from 'vue'
-import { useRoute } from 'vue-router';
-
+import { useRoute, useRouter } from 'vue-router';
+import Swal from 'sweetalert2'
 import axios from 'axios';
 const apiUrl = import.meta.env.VITE_API_URL;
 const token = localStorage.getItem('token')
@@ -90,9 +90,10 @@ const user = JSON.parse(localStorage.getItem('user'))
 
 
 const route = useRoute(); // Mengakses objek route saat ini
+const router = useRouter()
 const mode = route.query.mode
 const id = route.query.id
-
+const form = ref()
 const desaDinas = ref('Desa Ubung Kaja')
 const jumlahDesa = ref('')
 const jumlahDesaRules = [
@@ -188,6 +189,45 @@ watch(jumlahCagarBudaya, (newValue, oldValue) => {
 const params = ref({ id: id })
 const role = ref()
 
+const submit = async () => {
+  await form.value.validate().then(async (result) => {
+    if (result.valid) {
+      params.value.status = 'submit'
+      const data = {
+        jml_da: jumlahDesa.value,
+        li_da: listDesaAdat.value,
+        jml_ps: jumlahPelakuSeni.value,
+        jml_ss: jumlahSanggarSeni.value,
+        jml_cb: jumlahCagarBudaya.value,
+        li_cb: listCagarBudaya.value
+      }
+      params.value.data = data
+      await axios.post(`${apiUrl}/data`, params.value, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then(response => {
+        if (response.data.code == 200) {
+          Swal.fire({
+            title: "Good job!",
+            text: response.data.message,
+            icon: "success"
+          }).then((result) => {
+            router.back()
+          });
+
+        } else {
+          Swal.fire({
+            title: "Oops!",
+            text: response.data.message,
+            icon: "error"
+          })
+        }
+
+      })
+    }
+  })
+}
 const onVerify = async (status) => {
   try {
     params.value.status = status;
@@ -196,10 +236,29 @@ const onVerify = async (status) => {
         Authorization: `Bearer ${token}`,
       },
     }).then(response => {
-      console.log(response.data)
+      if (response.data.code == 200) {
+        Swal.fire({
+          title: "Good job!",
+          text: response.data.message,
+          icon: "success"
+        }).then((result) => {
+          router.back()
+        });
+
+      } else {
+        Swal.fire({
+          title: "Oops!",
+          text: response.data.message,
+          icon: "error"
+        })
+      }
     })
   } catch (error) {
-    console.log(error)
+    Swal.fire({
+      title: "Oops!",
+      text: error,
+      icon: "error"
+    })
   }
 }
 
@@ -212,7 +271,14 @@ onMounted(async () => {
       params: params.value
     }).then(response => {
       desaDinas.value = response.data.data.MDesa.nama
-      console.log(response.data.role)
+      if (response.data.data.answerKegiatan.length > 0) {
+        jumlahDesa.value = response.data.data.answerKegiatan[0].answer.jml_da
+        listDesaAdat.value = response.data.data.answerKegiatan[0].answer.li_da
+        jumlahPelakuSeni.value = response.data.data.answerKegiatan[0].answer.jml_ps
+        jumlahSanggarSeni.value = response.data.data.answerKegiatan[0].answer.jml_ss
+        jumlahCagarBudaya.value = response.data.data.answerKegiatan[0].answer.jml_cb
+        listCagarBudaya.value = response.data.data.answerKegiatan[0].answer.li_cb
+      }
       role.value = response.data.role
     })
   } catch (error) {

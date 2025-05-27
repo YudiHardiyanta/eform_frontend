@@ -54,7 +54,6 @@ const user = JSON.parse(localStorage.getItem('user'))
 
 const route = useRoute(); // Mengakses objek route saat ini
 const id = route.query.id
-console.log(id)
 const role = ref('')
 const items = ref([])
 
