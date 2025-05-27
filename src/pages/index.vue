@@ -21,16 +21,12 @@ const apiUrl = import.meta.env.VITE_API_URL;
 const token = localStorage.getItem('token')
 const user = JSON.parse(localStorage.getItem('user'))
 
-const data = {
-  username: user.email,
-};
-
 const kegiatan = ref([])
 
 onMounted(async () => {
   try {
     console.log(apiUrl)
-    await axios.post(`${apiUrl}/kegiatan`, data, {
+    await axios.get(`${apiUrl}/kegiatan`, {
       headers: {
         Authorization: `Bearer ${token}`
       },
