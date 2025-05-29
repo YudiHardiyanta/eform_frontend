@@ -8,48 +8,55 @@
             <v-row no-gutters>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
-                  <v-text-field v-model="desaDinas" label="Nama Desa Dinas" type="text" clearable
+                  <v-text-field v-model="desaDinas" label="1. Nama Desa Dinas" type="text" clearable
                     append-inner-icon="mdi-information-outline" variant="underlined" disabled></v-text-field>
                 </v-sheet>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
-                  <v-text-field v-model="jumlahDesa" :rules="jumlahDesaRules" label="Jumlah Desa Adat" type="number"
+                  <v-text-field v-model="jumlahDesa" :rules="jumlahDesaRules" label="2. Jumlah Desa Adat" type="number"
                     clearable append-inner-icon="mdi-information-outline" variant="underlined"
                     :disabled="mode == 'view'" :error="!!errorJumlahDesa" :error-messages="errorJumlahDesa"></v-text-field>
                   <div v-if="jumlahDesa > 0">
                     <span>Tuliskan nama desa adat</span>
                     <v-text-field v-for="(item, index) in listDesaAdat" :key="index" v-model="listDesaAdat[index]"
-                      :rules="[desaAdatRules]" label="Nama Desa Adat" append-icon="mdi-delete"
+                      :rules="[desaAdatRules]" label="2.L. Nama Desa Adat" append-icon="mdi-delete"
                       @click:append="removeDesaAdat(index)" :disabled="mode == 'view'"></v-text-field>
                   </div>
                 </v-sheet>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
-                  <v-text-field v-model="jumlahPelakuSeni" :rules="jumlahPelakuSeniRules" label="Jumlah Pelaku Seni"
+                  <v-text-field v-model="jumlahPelakuSeni" :rules="jumlahPelakuSeniRules" label="3. Jumlah Pelaku Seni"
                     type="number" clearable append-inner-icon="mdi-information-outline" variant="underlined"
                     :disabled="mode == 'view'"></v-text-field>
                 </v-sheet>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
-                  <v-text-field v-model="jumlahSanggarSeni" :rules="jumlahSanggarSeniRules" label="Jumlah Sanggar Seni"
+                  <v-text-field v-model="jumlahSanggarSeni" :rules="jumlahSanggarSeniRules" label="4. Jumlah Sanggar Seni"
                     type="number" clearable append-inner-icon="mdi-information-outline" variant="underlined"
                     :disabled="mode == 'view'"></v-text-field>
                 </v-sheet>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
-                  <v-text-field v-model="jumlahCagarBudaya" :rules="jumlahCagarBudayaRules" label="Jumlah Cagar Budaya"
+                  <v-text-field v-model="jumlahCagarBudaya" :rules="jumlahCagarBudayaRules" label="5. Jumlah Cagar Budaya"
                     type="number" clearable append-inner-icon="mdi-information-outline" variant="underlined"
                     :disabled="mode == 'view'" :error="!!errorJumlahCagar" :error-messages="errorJumlahCagar"></v-text-field>
                   <div v-if="jumlahCagarBudaya > 0">
                     <span>Tuliskan nama cagar budaya</span>
                     <v-text-field v-for="(item, index) in listCagarBudaya" :key="index" v-model="listCagarBudaya[index]"
-                      :rules="[cagarBudayaRules]" label="Nama Cagar Budaya" append-icon="mdi-delete"
+                      :rules="[cagarBudayaRules]" label="5.L. Nama Cagar Budaya" append-icon="mdi-delete"
                       @click:append="removeCagarBudaya(index)" :disabled="mode == 'view'"></v-text-field>
                   </div>
+                </v-sheet>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-sheet class="pa-2">
+                  <v-text-field v-model="catatan" label="6. Catatan"
+                    type="number" clearable append-inner-icon="mdi-information-outline" variant="underlined"
+                    :disabled="mode == 'view'"></v-text-field>
                 </v-sheet>
               </v-col>
             </v-row>
@@ -98,6 +105,7 @@ const desaDinas = ref('Desa Ubung Kaja')
 const jumlahDesa = ref('')
 const errorJumlahDesa = ref()
 const errorJumlahCagar = ref()
+const catatan = ref()
 const jumlahDesaRules = [
   value => {
     if (!value) return 'Jumlah Harus diisi'
@@ -210,7 +218,8 @@ const submit = async () => {
         jml_ps: jumlahPelakuSeni.value,
         jml_ss: jumlahSanggarSeni.value,
         jml_cb: jumlahCagarBudaya.value,
-        li_cb: listCagarBudaya.value
+        li_cb: listCagarBudaya.value,
+        catatan : catatan.value
       }
       params.value.data = data
       await axios.post(`${apiUrl}/data`, params.value, {
@@ -289,6 +298,7 @@ onMounted(async () => {
         jumlahSanggarSeni.value = response.data.data.answerKegiatan[0].answer.jml_ss
         jumlahCagarBudaya.value = response.data.data.answerKegiatan[0].answer.jml_cb
         listCagarBudaya.value = response.data.data.answerKegiatan[0].answer.li_cb
+        catatan.value = response.data.data.answerKegiatan[0].answer.catatan
       }
       role.value = response.data.role
     })
