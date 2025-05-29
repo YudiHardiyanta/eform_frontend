@@ -123,6 +123,9 @@ const desaAdatRules = (value) => {
   if (containsNumber(value)) {
     return 'Nama Desa Adat tidak boleh mengandung angka';
   }
+  if (value.length<3){
+    return 'Nama Desa Adat minimal 3 karakter';
+  }
   return true; // Validasi berhasil jika nilai tidak kosong dan lebih dari 3 karakter
 };
 
