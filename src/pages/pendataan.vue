@@ -3,6 +3,15 @@
     <AppMenuBar />
     <v-container>
         <v-sheet border rounded>
+            <v-container>
+                <v-chip-group selected-class="text-primary" mandatory column>
+                    <v-chip :text="'Semua ('+agg.total+')'" @click="refresh_data('all')"></v-chip>
+                    <v-chip :text="'Draf ('+agg.draft+')'" @click="refresh_data('draft')"></v-chip>
+                    <v-chip :text="'Submit ('+agg.submit+')'" @click="refresh_data('submit')"></v-chip>
+                    <v-chip :text="'Reject ('+agg.reject+')'" @click="refresh_data('reject')"></v-chip>
+                    <v-chip :text="'Approve ('+agg.approve+')'" @click="refresh_data('approve')"></v-chip>
+                </v-chip-group>
+            </v-container>
             <v-data-table :headers="headers" :hide-default-footer="items.length < 11" :items="items"
                 v-model:search="search" multi-sort>
                 <template v-slot:top>
@@ -14,6 +23,7 @@
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" density="compact" label="Cari" prepend-inner-icon="mdi-magnify"
                             variant="solo-filled" flat hide-details single-line></v-text-field>
+
                     </v-toolbar>
                 </template>
                 <template v-slot:item.actions="{ item }">
@@ -56,6 +66,12 @@ const route = useRoute(); // Mengakses objek route saat ini
 const id = route.query.id
 const role = ref('')
 const items = ref([])
+const agg = ref(
+    { 'total': 0 ,
+     'draft': 0 ,
+     'submit': 0 ,
+     'reject': 0 ,
+     'approve': 0 })
 
 const isEditing = shallowRef(false)
 
@@ -69,7 +85,8 @@ const params = ref({
     id: id
 })
 
-onMounted(async () => {
+const refresh_data = async (status) => {
+    params.value.status = status
     try {
         await axios.get(`${apiUrl}/sampel`, {
             headers: {
@@ -83,23 +100,48 @@ onMounted(async () => {
     } catch (error) {
         console.log(error)
     }
-    //reset()
+}
+
+const agg_data = async () => {
+    try {
+        await axios.get(`${apiUrl}/sampel/agg`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            params: params.value
+        }).then(response => {
+            let totAgg = 0;
+            response.data.data.forEach(element => {
+                if(element.status=='draft'){
+                    agg.value.draft = element._count._all 
+                }
+                if(element.status=='submit'){
+                    agg.value.submit=element._count._all 
+                }
+                if(element.status=='reject'){
+                    agg.value.reject=element._count._all 
+                }
+                if(element.status=='approve'){
+                    agg.value.approve=element._count._all 
+                }
+                totAgg = totAgg+element._count._all
+                
+            });
+            agg.value.total=totAgg
+            console.log(agg.value)
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+onMounted(async () => {
+    refresh_data('all')
+    agg_data()
 })
 
 async function reset() {
-    try {
-        await axios.get(`${apiUrl}/sampel`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            params: params.value
-        }).then(response => {
-            items.value = response.data.data
-            role.value = response.data.role
-        })
-    } catch (error) {
-        console.log(error)
-    }
+    refresh_data('all')
 }
 
 </script>
