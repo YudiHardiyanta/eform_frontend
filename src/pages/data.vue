@@ -1,3 +1,8 @@
+<style scoped>
+input {
+  text-transform: uppercase;
+}
+</style>
 <template>
   <div>
     <AppMenuBar />
@@ -16,10 +21,12 @@
                 <v-sheet class="pa-2">
                   <v-text-field v-model="jumlahDesa" :rules="jumlahDesaRules" label="2. Jumlah Desa Adat" type="number"
                     clearable append-inner-icon="mdi-information-outline" variant="underlined"
-                    :disabled="mode == 'view'" :error="!!errorJumlahDesa" :error-messages="errorJumlahDesa"></v-text-field>
+                    :disabled="mode == 'view'" :error="!!errorJumlahDesa"
+                    :error-messages="errorJumlahDesa"></v-text-field>
                   <div v-if="jumlahDesa > 0">
                     <span>Tuliskan nama desa adat</span>
-                    <v-text-field v-for="(item, index) in listDesaAdat" :key="index" v-model="listDesaAdat[index]"
+                    <v-text-field @input="listDesaAdat[index] = listDesaAdat[index].toUpperCase()"
+                      v-for="(item, index) in listDesaAdat" :key="index" v-model="listDesaAdat[index]"
                       :rules="[desaAdatRules]" label="2.L. Nama Desa Adat" append-icon="mdi-delete"
                       @click:append="removeDesaAdat(index)" :disabled="mode == 'view'"></v-text-field>
                   </div>
@@ -34,19 +41,21 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
-                  <v-text-field v-model="jumlahSanggarSeni" :rules="jumlahSanggarSeniRules" label="4. Jumlah Sanggar Seni"
-                    type="number" clearable append-inner-icon="mdi-information-outline" variant="underlined"
-                    :disabled="mode == 'view'"></v-text-field>
+                  <v-text-field v-model="jumlahSanggarSeni" :rules="jumlahSanggarSeniRules"
+                    label="4. Jumlah Sanggar Seni" type="number" clearable append-inner-icon="mdi-information-outline"
+                    variant="underlined" :disabled="mode == 'view'"></v-text-field>
                 </v-sheet>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
-                  <v-text-field v-model="jumlahCagarBudaya" :rules="jumlahCagarBudayaRules" label="5. Jumlah Cagar Budaya"
-                    type="number" clearable append-inner-icon="mdi-information-outline" variant="underlined"
-                    :disabled="mode == 'view'" :error="!!errorJumlahCagar" :error-messages="errorJumlahCagar"></v-text-field>
+                  <v-text-field v-model="jumlahCagarBudaya" :rules="jumlahCagarBudayaRules"
+                    label="5. Jumlah Cagar Budaya" type="number" clearable append-inner-icon="mdi-information-outline"
+                    variant="underlined" :disabled="mode == 'view'" :error="!!errorJumlahCagar"
+                    :error-messages="errorJumlahCagar"></v-text-field>
                   <div v-if="jumlahCagarBudaya > 0">
                     <span>Tuliskan nama cagar budaya</span>
-                    <v-text-field v-for="(item, index) in listCagarBudaya" :key="index" v-model="listCagarBudaya[index]"
+                    <v-text-field @input="listCagarBudaya[index] = listCagarBudaya[index].toUpperCase()"
+                      v-for="(item, index) in listCagarBudaya" :key="index" v-model="listCagarBudaya[index]"
                       :rules="[cagarBudayaRules]" label="5.L. Nama Cagar Budaya" append-icon="mdi-delete"
                       @click:append="removeCagarBudaya(index)" :disabled="mode == 'view'"></v-text-field>
                   </div>
@@ -54,9 +63,8 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
-                  <v-text-field v-model="catatan" label="6. Catatan"
-                    type="number" clearable append-inner-icon="mdi-information-outline" variant="underlined"
-                    :disabled="mode == 'view'"></v-text-field>
+                  <v-textarea v-model="catatan" label="6. Catatan" variant="underlined"
+                    :disabled="mode == 'view'"></v-textarea>
                 </v-sheet>
               </v-col>
             </v-row>
@@ -131,7 +139,7 @@ const desaAdatRules = (value) => {
   if (containsNumber(value)) {
     return 'Nama Desa Adat tidak boleh mengandung angka';
   }
-  if (value.length<3){
+  if (value.length < 3) {
     return 'Nama Desa Adat minimal 3 karakter';
   }
   return true; // Validasi berhasil jika nilai tidak kosong dan lebih dari 3 karakter
@@ -182,6 +190,9 @@ const cagarBudayaRules = (value) => {
   if (containsNumber(value)) {
     return 'Nama Cagar Budaya tidak boleh mengandung angka';
   }
+  if (value.length < 3) {
+    return 'Nama Desa Adat minimal 3 karakter';
+  }
   return true; // Validasi berhasil jika nilai tidak kosong dan lebih dari 3 karakter
 };
 
@@ -204,13 +215,13 @@ const role = ref()
 
 const submit = async () => {
   await form.value.validate().then(async (result) => {
-    if(jumlahDesa.value!=listDesaAdat.value.length){
-      errorJumlahDesa.value='Jumlah Desa Adat tidak sesuai dengan Daftar Desa Adat'
+    if (jumlahDesa.value != listDesaAdat.value.length) {
+      errorJumlahDesa.value = 'Jumlah Desa Adat tidak sesuai dengan Daftar Desa Adat'
     }
-    if(jumlahCagarBudaya.value!=listCagarBudaya.value.length){
-      errorJumlahDesa.value='Jumlah Cagar Budaya tidak sesuai dengan Daftar Cagar Budaya'
+    if (jumlahCagarBudaya.value != listCagarBudaya.value.length) {
+      errorJumlahDesa.value = 'Jumlah Cagar Budaya tidak sesuai dengan Daftar Cagar Budaya'
     }
-    if (result.valid && (jumlahDesa.value==listDesaAdat.value.length) && (jumlahCagarBudaya.value==listCagarBudaya.value.length)) {
+    if (result.valid && (jumlahDesa.value == listDesaAdat.value.length) && (jumlahCagarBudaya.value == listCagarBudaya.value.length)) {
       params.value.status = 'submit'
       const data = {
         jml_da: jumlahDesa.value,
@@ -219,7 +230,7 @@ const submit = async () => {
         jml_ss: jumlahSanggarSeni.value,
         jml_cb: jumlahCagarBudaya.value,
         li_cb: listCagarBudaya.value,
-        catatan : catatan.value
+        catatan: catatan.value
       }
       params.value.data = data
       await axios.post(`${apiUrl}/data`, params.value, {
