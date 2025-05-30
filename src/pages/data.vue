@@ -21,14 +21,14 @@ input {
                 <v-sheet class="pa-2">
                   <v-text-field v-model="jumlahDesa" :rules="jumlahDesaRules" label="2. Jumlah Desa Adat" type="number"
                     clearable append-inner-icon="mdi-information-outline" variant="underlined"
-                    :disabled="mode == 'view'" :error="!!errorJumlahDesa"
+                    :disabled="mode == 'view' || role!='pencacah'" :error="!!errorJumlahDesa"
                     :error-messages="errorJumlahDesa"></v-text-field>
                   <div v-if="jumlahDesa > 0">
                     <span>Tuliskan nama desa adat</span>
                     <v-text-field @input="listDesaAdat[index] = listDesaAdat[index].toUpperCase()"
                       v-for="(item, index) in listDesaAdat" :key="index" v-model="listDesaAdat[index]"
                       :rules="[desaAdatRules]" label="2.L. Nama Desa Adat" append-icon="mdi-delete"
-                      @click:append="removeDesaAdat(index)" :disabled="mode == 'view'"></v-text-field>
+                      @click:append="removeDesaAdat(index)" :disabled="mode == 'view' || role!='pencacah'"></v-text-field>
                   </div>
                 </v-sheet>
               </v-col>
@@ -36,28 +36,28 @@ input {
                 <v-sheet class="pa-2">
                   <v-text-field v-model="jumlahPelakuSeni" :rules="jumlahPelakuSeniRules" label="3. Jumlah Pelaku Seni"
                     type="number" clearable append-inner-icon="mdi-information-outline" variant="underlined"
-                    :disabled="mode == 'view'"></v-text-field>
+                    :disabled="mode == 'view' || role!='pencacah'"></v-text-field>
                 </v-sheet>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
                   <v-text-field v-model="jumlahSanggarSeni" :rules="jumlahSanggarSeniRules"
                     label="4. Jumlah Sanggar Seni" type="number" clearable append-inner-icon="mdi-information-outline"
-                    variant="underlined" :disabled="mode == 'view'"></v-text-field>
+                    variant="underlined" :disabled="mode == 'view' || role!='pencacah'"></v-text-field>
                 </v-sheet>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
                   <v-text-field v-model="jumlahCagarBudaya" :rules="jumlahCagarBudayaRules"
                     label="5. Jumlah Cagar Budaya" type="number" clearable append-inner-icon="mdi-information-outline"
-                    variant="underlined" :disabled="mode == 'view'" :error="!!errorJumlahCagar"
+                    variant="underlined" :disabled="mode == 'view' || role!='pencacah'" :error="!!errorJumlahCagar"
                     :error-messages="errorJumlahCagar"></v-text-field>
                   <div v-if="jumlahCagarBudaya > 0">
                     <span>Tuliskan nama cagar budaya</span>
                     <v-text-field @input="listCagarBudaya[index] = listCagarBudaya[index].toUpperCase()"
                       v-for="(item, index) in listCagarBudaya" :key="index" v-model="listCagarBudaya[index]"
                       :rules="[cagarBudayaRules]" label="5.L. Nama Cagar Budaya" append-icon="mdi-delete"
-                      @click:append="removeCagarBudaya(index)" :disabled="mode == 'view'"></v-text-field>
+                      @click:append="removeCagarBudaya(index)" :disabled="mode == 'view' || role!='pencacah'"></v-text-field>
                   </div>
                 </v-sheet>
               </v-col>
@@ -80,7 +80,7 @@ input {
           <v-row ga="3">
             <v-col cols="12" sm="4">
               <v-btn class="pd-2" type="btn" block rounded="lg" color="teal-darken-3" @click="onVerify('approve')"
-                v-if="(mode == 'edit' && role == 'pengawas')">Setujui</v-btn>
+                v-if="(mode == 'edit' && role == 'pengawas')">Setuju</v-btn>
             </v-col>
             <v-col cols="12" sm="4">
               <v-btn class="pd-2" type="btn" block rounded="lg" color="red-darken-3" @click="onVerify('reject')"
@@ -113,7 +113,7 @@ const desaDinas = ref('Desa Ubung Kaja')
 const jumlahDesa = ref('')
 const errorJumlahDesa = ref()
 const errorJumlahCagar = ref()
-const catatan = ref()
+const catatan = ref('')
 const jumlahDesaRules = [
   value => {
     if (!value) return 'Jumlah Harus diisi'
@@ -223,6 +223,7 @@ const submit = async () => {
     }
     if (result.valid && (jumlahDesa.value == listDesaAdat.value.length) && (jumlahCagarBudaya.value == listCagarBudaya.value.length)) {
       params.value.status = 'submit'
+      params.value.catatan=catatan.value
       const data = {
         jml_da: jumlahDesa.value,
         li_da: listDesaAdat.value,
@@ -230,7 +231,7 @@ const submit = async () => {
         jml_ss: jumlahSanggarSeni.value,
         jml_cb: jumlahCagarBudaya.value,
         li_cb: listCagarBudaya.value,
-        catatan: catatan.value
+        //catatan: catatan.value
       }
       params.value.data = data
       await axios.post(`${apiUrl}/data`, params.value, {
@@ -262,6 +263,7 @@ const submit = async () => {
 const onVerify = async (status) => {
   try {
     params.value.status = status;
+    params.value.catatan = catatan.value;
     await axios.post(`${apiUrl}/data/verify`, params.value, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -309,8 +311,8 @@ onMounted(async () => {
         jumlahSanggarSeni.value = response.data.data.answerKegiatan[0].answer.jml_ss
         jumlahCagarBudaya.value = response.data.data.answerKegiatan[0].answer.jml_cb
         listCagarBudaya.value = response.data.data.answerKegiatan[0].answer.li_cb
-        catatan.value = response.data.data.answerKegiatan[0].answer.catatan
       }
+      catatan.value = response.data.data.catatan
       role.value = response.data.role
     })
   } catch (error) {
