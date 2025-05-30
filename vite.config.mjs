@@ -20,7 +20,7 @@ export default defineConfig({
       devOptions: {
         enabled: true
       },
-      includeAssets: ['favicon.ico', 'logo.png','logo.png'],//'apple-touch-icon.png', 'mask-icon.svg'],
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png','mask-icon.svg'],//'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
         name: 'EForm BPS',
         short_name: 'EForm',
@@ -28,12 +28,12 @@ export default defineConfig({
         theme_color: '#ffffff',
         icons: [
           {
-            src: 'logo.png',///assets/pwa-192x192.png',
+            src: 'pwa-192x192.png',///assets/pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'logo.png',
+            src: 'pwa-192x192.png',
             sizes: '512x512',
             type: 'image/png'
           }
