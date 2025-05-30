@@ -8,11 +8,38 @@ import VueRouter from 'unplugin-vue-router/vite'
 // Utilities
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
+import { VitePWA } from 'vite-plugin-pwa'
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     VueRouter(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      devOptions: {
+        enabled: true
+      },
+      includeAssets: ['favicon.ico', 'logo.png','logo.png'],//'apple-touch-icon.png', 'mask-icon.svg'],
+      manifest: {
+        name: 'EForm BPS',
+        short_name: 'EForm',
+        description: 'Form Pendataan BPS Provinsi Bali',
+        theme_color: '#ffffff',
+        icons: [
+          {
+            src: 'logo.png',///assets/pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: 'logo.png',
+            sizes: '512x512',
+            type: 'image/png'
+          }
+        ]
+      }
+    }),
     Vue({
       template: { transformAssetUrls },
     }),

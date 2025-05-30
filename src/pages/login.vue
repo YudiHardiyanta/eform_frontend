@@ -8,17 +8,21 @@
 </style>
 <template>
     <div class="center">
-        <v-card rounded="lg" prepend-icon="$vuetify" subtitle="Masuk ke sistem" width="300" color="indigo-darken-3"
-            label="indigo-darken-3" value="indigo-darken-3">
+        <v-card rounded="lg" subtitle="Masuk ke sistem" width="300" color="indigo-darken-3" label="indigo-darken-3"
+            value="indigo-darken-3">
             <template v-slot:title>
                 <span class="font-weight-black">E-Form</span>
+            </template>
+            <template v-slot:prepend>
+                <v-img :width="60" color="indigo-lighten-4" aspect-ratio="1/1" cover rounded
+                    src="/logo.png"></v-img>
             </template>
             <v-card-text class="bg-blue-grey-lighten-5 pt-4">
                 <v-form validate-on="submit lazy" @submit.prevent="submit">
                     <v-text-field clearable label="Username atau Email" variant="outlined" v-model="userName"
                         :rules="userNameRules" rounded="lg" autocomplete="username" :error="!!userError"
                         :error-messages="userError"></v-text-field>
-                        <br>
+                    <br>
                     <v-text-field clearable label="Password" variant="outlined" v-model="password"
                         :rules="passwordRules" rounded="lg" autocomplete="current-password"
                         :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'"
@@ -78,8 +82,8 @@ async function submit(event) {
             localStorage.setItem('token', token.value);  // Menyimpan token di localStorage
             router.push('/')
         } catch (error) {
-            userError.value=error.response.data.message;
-            passError.value=error.response.data.message;
+            userError.value = error.response.data.message;
+            passError.value = error.response.data.message;
         }
         //alert(JSON.stringify(results, null, 2))
     }, 1000);
