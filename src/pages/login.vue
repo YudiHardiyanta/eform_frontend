@@ -21,8 +21,8 @@
                         <br>
                     <v-text-field clearable label="Password" variant="outlined" v-model="password"
                         :rules="passwordRules" rounded="lg" autocomplete="current-password"
-                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'"
-                        @click:append="show1 = !show1" :error="!!passError"
+                        :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'"
+                        @click:append-inner="show1 = !show1" :error="!!passError"
                         :error-messages="passError"></v-text-field>
                     <v-btn :loading="loading" class="mt-2" text="Masuk" type="submit" block rounded="lg"
                         color="indigo-darken-3"></v-btn>

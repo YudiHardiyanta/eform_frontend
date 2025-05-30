@@ -78,7 +78,7 @@ const isEditing = shallowRef(false)
 const headers = [
     { title: 'Nama Desa', key: 'MDesa.nama', align: 'start' },
     { title: 'Kecamatan', key: 'MKec.nama', align: 'start' },
-    { title: 'Actions', key: 'actions', align: 'end', sortable: false },
+    { title: 'Aksi', key: 'actions', align: 'end', sortable: false },
 ]
 
 const params = ref({
