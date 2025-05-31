@@ -34,7 +34,7 @@ input {
               </v-col>
               <v-col cols="12" sm="6">
                 <v-sheet class="pa-2">
-                  <v-text-field v-model="jumlahPelakuSeni" :rules="jumlahPelakuSeniRules" label="3. Jumlah Pelaku Seni"
+                  <v-text-field v-model="jumlahPelakuSeni" :rules="jumlahPelakuSeniRules" label="3. Jumlah Pelaku Seni Perorangan"
                     type="number" clearable append-inner-icon="mdi-information-outline" variant="underlined"
                     :disabled="mode == 'view' || role!='pencacah'"></v-text-field>
                 </v-sheet>
