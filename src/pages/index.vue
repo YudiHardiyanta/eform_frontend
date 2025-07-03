@@ -4,8 +4,8 @@
     <v-container>
       <v-row no-gutters>
         <v-col cols="12" sm="6">
-          <v-card v-for="item in kegiatan" :key="item.id" append-icon="mdi-open-in-new" :href="'/pendataan?id=' + item.kegiatan_id"
-            prepend-icon="mdi-note-edit" rel="noopener" :subtitle="item.role + ' - 1 Juni - 30 Juni 2025'"
+          <v-card class="mt-1 mb-1" v-for="item in kegiatan" :key="item.id" append-icon="mdi-open-in-new" :href="'/pendataan?id=' + item.kegiatan_id"
+            prepend-icon="mdi-note-edit" rel="noopener" :subtitle="item.role + ' - '+item.Kegiatan.deskripsi"
             :title="item.Kegiatan.nama" style="width: 100%;" color="indigo-darken-3"></v-card>
         </v-col>
       </v-row>
@@ -32,6 +32,7 @@ onMounted(async () => {
       },
     }).then(response => {
       kegiatan.value = response.data.data
+      
     })
   } catch (err) {
     console.log(err.res)

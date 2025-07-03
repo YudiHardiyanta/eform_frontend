@@ -5,11 +5,11 @@
         <v-sheet border rounded>
             <v-container>
                 <v-chip-group selected-class="text-primary" mandatory column>
-                    <v-chip :text="'Semua ('+agg.total+')'" @click="refresh_data('all')"></v-chip>
-                    <v-chip :text="'Draf ('+agg.draft+')'" @click="refresh_data('draft')"></v-chip>
-                    <v-chip :text="'Submit ('+agg.submit+')'" @click="refresh_data('submit')"></v-chip>
-                    <v-chip :text="'Reject ('+agg.reject+')'" @click="refresh_data('reject')"></v-chip>
-                    <v-chip :text="'Approve ('+agg.approve+')'" @click="refresh_data('approve')"></v-chip>
+                    <v-chip :text="'Semua (' + agg.total + ')'" @click="refresh_data('all')"></v-chip>
+                    <v-chip :text="'Draf (' + agg.draft + ')'" @click="refresh_data('draft')"></v-chip>
+                    <v-chip :text="'Submit (' + agg.submit + ')'" @click="refresh_data('submit')"></v-chip>
+                    <v-chip :text="'Reject (' + agg.reject + ')'" @click="refresh_data('reject')"></v-chip>
+                    <v-chip :text="'Approve (' + agg.approve + ')'" @click="refresh_data('approve')"></v-chip>
                 </v-chip-group>
             </v-container>
             <v-data-table :headers="headers" :hide-default-footer="items.length < 11" :items="items"
@@ -28,9 +28,8 @@
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <div class="d-flex ga-2 justify-end">
-                        <v-btn
-                            v-if="(item.status == 'approve' && role == 'pengawas') || (item.status == 'reject' && role == 'pencacah') || (item.status == 'submit' && role == 'pengawas') || (item.status == 'draft' && role == 'pencacah')"
-                            icon="mdi-pencil" size="x-small" :to="'/data?id=' + item.id + '&mode=edit'"></v-btn>
+                        <v-btn v-if="canEdit" icon="mdi-pencil" size="x-small"
+                            :to="'/data?id=' + item.id + '&mode=edit'"></v-btn>
                         <v-btn icon="mdi-eye" size="x-small" :to="'/data?id=' + item.id + '&mode=view'"
                             :color="item.status == 'approve' ? 'teal-lighten-3' : item.status == 'reject' ? 'pink-lighten-3' : item.status == 'submit' ? 'blue-lighten-3' : ''"></v-btn>
                     </div>
@@ -67,19 +66,17 @@ const id = route.query.id
 const role = ref('')
 const items = ref([])
 const agg = ref(
-    { 'total': 0 ,
-     'draft': 0 ,
-     'submit': 0 ,
-     'reject': 0 ,
-     'approve': 0 })
+    {
+        'total': 0,
+        'draft': 0,
+        'submit': 0,
+        'reject': 0,
+        'approve': 0
+    })
 
-const isEditing = shallowRef(false)
+const canEdit = ref(false)
 
-const headers = [
-    { title: 'Nama Desa', key: 'MDesa.nama', align: 'start' },
-    { title: 'Kecamatan', key: 'MKec.nama', align: 'start' },
-    { title: 'Aksi', key: 'actions', align: 'end', sortable: false },
-]
+const headers = ref([])
 
 const params = ref({
     id: id
@@ -96,6 +93,12 @@ const refresh_data = async (status) => {
         }).then(response => {
             items.value = response.data.data
             role.value = response.data.role
+            if (headers.value.length == 0) {
+                response.data.config.table_header.forEach(element => {
+                    headers.value.push({ "title": element.value, "key": element.key, "align": 'start' })
+                })
+            }
+            canEdit.value = response.data.config[role.value + '_edit']
         })
     } catch (error) {
         console.log(error)
@@ -112,23 +115,23 @@ const agg_data = async () => {
         }).then(response => {
             let totAgg = 0;
             response.data.data.forEach(element => {
-                if(element.status=='draft'){
-                    agg.value.draft = element._count._all 
+                if (element.status == 'draft') {
+                    agg.value.draft = element._count._all
                 }
-                if(element.status=='submit'){
-                    agg.value.submit=element._count._all 
+                if (element.status == 'submit') {
+                    agg.value.submit = element._count._all
                 }
-                if(element.status=='reject'){
-                    agg.value.reject=element._count._all 
+                if (element.status == 'reject') {
+                    agg.value.reject = element._count._all
                 }
-                if(element.status=='approve'){
-                    agg.value.approve=element._count._all 
+                if (element.status == 'approve') {
+                    agg.value.approve = element._count._all
                 }
-                totAgg = totAgg+element._count._all
-                
+                totAgg = totAgg + element._count._all
+
             });
-            agg.value.total=totAgg
-            console.log(agg.value)
+            agg.value.total = totAgg
+            //console.log(agg.value)
         })
     } catch (error) {
         console.log(error)
