@@ -6,7 +6,8 @@
             <v-container>
                 <v-chip-group selected-class="text-primary" mandatory column>
                     <v-chip :text="'Semua (' + agg.total + ')'" @click="refresh_data('all')"></v-chip>
-                    <v-chip :text="'Draf (' + agg.draft + ')'" @click="refresh_data('draft')"></v-chip>
+                    <v-chip :text="'Open (' + agg.open + ')'" @click="refresh_data('open')"></v-chip>
+                    <v-chip :text="'Draft (' + agg.draft + ')'" @click="refresh_data('draft')"></v-chip>
                     <v-chip :text="'Submit (' + agg.submit + ')'" @click="refresh_data('submit')"></v-chip>
                     <v-chip :text="'Reject (' + agg.reject + ')'" @click="refresh_data('reject')"></v-chip>
                     <v-chip :text="'Approve (' + agg.approve + ')'" @click="refresh_data('approve')"></v-chip>
@@ -29,9 +30,9 @@
                 <template v-slot:item.actions="{ item }">
                     <div class="d-flex ga-2 justify-end">
                         <v-btn v-if="canEdit" icon="mdi-pencil" size="x-small"
-                            :to="'/data?id=' + item.id + '&mode=edit'"></v-btn>
-                        <v-btn icon="mdi-eye" size="x-small" :to="'/data?id=' + item.id + '&mode=view'"
-                            :color="item.status == 'approve' ? 'teal-lighten-3' : item.status == 'reject' ? 'pink-lighten-3' : item.status == 'submit' ? 'blue-lighten-3' : ''"></v-btn>
+                            :to="'/'+path+'?id=' + item.id + '&mode=edit'"></v-btn>
+                        <v-btn icon="mdi-eye" size="x-small" :to="'/'+path+'?id=' + item.id + '&mode=view'"
+                            :color="item.status == 'approve' ? 'teal-lighten-3' : item.status == 'reject' ? 'pink-lighten-3' : item.status == 'submit' ? 'blue-lighten-3' : item.status == 'draf' ? 'blue-grey-darken-3' : ''"></v-btn>
                     </div>
                 </template>
 
@@ -59,7 +60,7 @@ import axios from 'axios';
 const apiUrl = import.meta.env.VITE_API_URL;
 const token = localStorage.getItem('token')
 const user = JSON.parse(localStorage.getItem('user'))
-
+const path = ref('')
 
 const route = useRoute(); // Mengakses objek route saat ini
 const id = route.query.id
@@ -99,6 +100,7 @@ const refresh_data = async (status) => {
                 })
             }
             canEdit.value = response.data.config[role.value + '_edit']
+            path.value = response.data.config.path
         })
     } catch (error) {
         console.log(error)
@@ -115,6 +117,9 @@ const agg_data = async () => {
         }).then(response => {
             let totAgg = 0;
             response.data.data.forEach(element => {
+                if (element.status == 'open') {
+                    agg.value.open = element._count._all
+                }
                 if (element.status == 'draft') {
                     agg.value.draft = element._count._all
                 }

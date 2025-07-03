@@ -1,15 +1,17 @@
 <template>
   <div>
     <AppMenuBar />
+    
     <v-container>
-      <v-row no-gutters>
-        <v-col cols="12" sm="6">
-          <v-card class="mt-1 mb-1" v-for="item in kegiatan" :key="item.id" append-icon="mdi-open-in-new" :href="'/pendataan?id=' + item.kegiatan_id"
+      <v-row>
+        <v-col cols="12" sm="6" v-for="item in kegiatan" :key="item.id">
+          <v-card append-icon="mdi-open-in-new" :href="'/pendataan?id=' + item.kegiatan_id"
             prepend-icon="mdi-note-edit" rel="noopener" :subtitle="item.role + ' - '+item.Kegiatan.deskripsi"
-            :title="item.Kegiatan.nama" style="width: 100%;" color="indigo-darken-3"></v-card>
+            :title="item.Kegiatan.nama" style="width: 100%;" :color="item.Kegiatan.color"></v-card>
         </v-col>
       </v-row>
     </v-container>
+    
   </div>
 </template>
 
