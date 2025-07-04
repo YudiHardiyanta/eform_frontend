@@ -184,6 +184,7 @@ const submit = async () => {
             errorJumlahSegmen.value = 'Jumlah Segmen tidak sesuai dengan daftar segmen'
         }
         if (result.valid && (jumlahSegmen.value == listSegmen.value.length)) {
+            params.value.catatan = catatan.value
             params.value.status = 'draft'
             if (role.value == 'pencacah' && isDone.value) {
                 params.value.status = 'submit'
