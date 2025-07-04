@@ -32,7 +32,7 @@
                         <v-btn v-if="canEdit" icon="mdi-pencil" size="x-small"
                             :to="'/'+path+'?id=' + item.id + '&mode=edit'"></v-btn>
                         <v-btn icon="mdi-eye" size="x-small" :to="'/'+path+'?id=' + item.id + '&mode=view'"
-                            :color="item.status == 'approve' ? 'teal-lighten-3' : item.status == 'reject' ? 'pink-lighten-3' : item.status == 'submit' ? 'blue-lighten-3' : item.status == 'draf' ? 'blue-grey-darken-3' : ''"></v-btn>
+                            :color="item.status == 'approve' ? 'teal-lighten-3' : item.status == 'reject' ? 'pink-lighten-3' : item.status == 'submit' ? 'blue-lighten-3' : item.status == 'draft' ? 'blue-grey-darken-3' : ''"></v-btn>
                     </div>
                 </template>
 
@@ -69,6 +69,7 @@ const items = ref([])
 const agg = ref(
     {
         'total': 0,
+        'open' : 0,
         'draft': 0,
         'submit': 0,
         'reject': 0,
