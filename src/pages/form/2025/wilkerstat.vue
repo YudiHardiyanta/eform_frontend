@@ -25,7 +25,6 @@ input {
                                         disabled></v-text-field>
                                 </v-sheet>
                             </v-col>
-
                             <v-col cols="12" sm="6">
                                 <v-sheet class="pa-2">
                                     <v-text-field v-model="jumlahSegmen" :rules="jumlahSegmenRules"
@@ -34,35 +33,38 @@ input {
                                         :disabled="mode == 'view'" :error="!!errorJumlahSegmen"
                                         :error-messages="errorJumlahSegmen"></v-text-field>
                                     <div v-if="jumlahSegmen > 0">
-                                        <span>Tuliskan detail segmen.</span>
+                                        <span>4. Tuliskan detail segmen.</span>
                                         <p></p>
                                         <span>Muatan Segmen adalah muatan yang ada di <b><i>LKM Blok 3 Kolom
                                                     11</i></b></span>
                                         <div v-for="(item, index) in listSegmen" :key="index" class="mt-2">
-                                            <v-text-field v-model="listSegmen[index].nomor" :rules="[nomorSegmenRules]"
-                                                :label="'3.' + (parseInt(index) + 1).toString() + '. Nomor Segmen'"
-                                                append-icon="mdi-delete" @click:append="removeSegmen(index)"
-                                                :disabled="mode == 'view'" placeholder="01"></v-text-field>
-                                            <v-text-field v-model="listSegmen[index].muatan"
-                                                :rules="[muatanSegmenRules]" type="number"
-                                                :label="'3.' + (parseInt(index) + 1).toString() + '. Muatan Segmen'"
-                                                :disabled="mode == 'view'"></v-text-field>
-
-                                            <v-checkbox v-model="listSegmen[index].is_done"
-                                                :label="'3.' + (parseInt(index) + 1).toString() + '. Tandai segmen ke-'+(parseInt(index) + 1).toString()+' selesai.'" :disabled="mode == 'view'"></v-checkbox>
-
-                                            <v-divider inset :thickness="4"></v-divider>
+                                            <v-sheet border class="pa-2">
+                                                <span>{{ 'Segmen ke-' + (parseInt(index) + 1).toString() }}</span>
+                                                <v-text-field v-model="listSegmen[index].nomor"
+                                                    :rules="[nomorSegmenRules]"
+                                                    :label="'4.' + (parseInt(index) + 1).toString() + '. Nomor Segmen'"
+                                                    append-icon="mdi-delete" @click:append="removeSegmen(index)"
+                                                    :disabled="mode == 'view'" placeholder="01"></v-text-field>
+                                                <v-text-field v-model="listSegmen[index].muatan"
+                                                    :rules="[muatanSegmenRules]" type="number"
+                                                    :label="'4.' + (parseInt(index) + 1).toString() + '. Muatan Segmen'"
+                                                    :disabled="mode == 'view'"></v-text-field>
+                                                <v-checkbox v-model="listSegmen[index].is_done"
+                                                    :label="'4.' + (parseInt(index) + 1).toString() + '. Tandai segmen ke-' + (parseInt(index) + 1).toString() + ' selesai.'"
+                                                    :disabled="mode == 'view'"></v-checkbox>
+                                            </v-sheet>
                                         </div>
                                     </div>
                                 </v-sheet>
                             </v-col>
                             <v-col cols="12" sm="6">
                                 <v-sheet>
-                                <v-checkbox v-model="isDone"
-                                    label="Tandai seluruh segmen pada SLS ini selesai didata." :disabled="mode == 'view'"></v-checkbox>
+                                    <v-checkbox v-model="isDone"
+                                        label="Tandai seluruh segmen pada SLS ini selesai didata."
+                                        :disabled="mode == 'view'"></v-checkbox>
                                 </v-sheet>
                                 <v-sheet class="pa-2">
-                                    <v-textarea v-model="catatan" label="4. Catatan" variant="underlined"
+                                    <v-textarea v-model="catatan" label="5. Catatan" variant="underlined"
                                         :disabled="mode == 'view'"></v-textarea>
                                 </v-sheet>
                             </v-col>
@@ -116,10 +118,10 @@ let listSegmen = ref([])
 
 watch(jumlahSegmen, (newValue, oldValue) => {
     console.log('eee')
-    if (listSegmen.value.filter(item => item.nomor!=='').length != newValue) {
-        listSegmen.value = listSegmen.value.filter(item => item.nomor!=='')
-        for (let i = 0; i < newValue - listSegmen.value.filter(item => item.nomor!=='').length; i++) {
-            listSegmen.value.push({ 'nomor': '', 'muatan': '0' ,'is_done' : false})
+    if (listSegmen.value.filter(item => item.nomor !== '').length != newValue) {
+        listSegmen.value = listSegmen.value.filter(item => item.nomor !== '')
+        for (let i = 0; i < newValue - listSegmen.value.filter(item => item.nomor !== '').length; i++) {
+            listSegmen.value.push({ 'nomor': '', 'muatan': '0', 'is_done': false })
         }
     }
 });
@@ -141,10 +143,10 @@ const muatanSegmenRules = (value) => {
     if (value === '') {
         return 'Muatan Segmen tidak boleh kosong';
     }
-    if(value>180){
+    if (value > 180) {
         return 'Muatan Segmen tidak boleh lebih dari 180';
     }
-    if(value<0){
+    if (value < 0) {
         return 'Muatan Segmen tidak boleh negatif';
     }
     return true;
@@ -161,7 +163,15 @@ function onlyNumber(text) {
 }
 
 const removeSegmen = (index) => {
-    listSegmen.value.splice(index, 1); // Menghapus item pada indeks tertentu
+    if (listSegmen.value.length != jumlahSegmen.value) {
+        listSegmen.value.splice(index, 1); // Menghapus item pada indeks tertentu
+    } else {
+        Swal.fire({
+            title: "Oops!",
+            text: "Jumlah Segmen sama dengan jumlah daftar segmen, jika ingin menghapus, dapat menyesuaikan jumlah segmen terlebih dahulu.",
+            icon: "error"
+        })
+    }
 };
 
 // trigger data
@@ -175,19 +185,19 @@ const submit = async () => {
         }
         if (result.valid && (jumlahSegmen.value == listSegmen.value.length)) {
             params.value.status = 'draft'
-            if(role.value=='pencacah' && isDone.value){
-                params.value.status = 'submit'    
+            if (role.value == 'pencacah' && isDone.value) {
+                params.value.status = 'submit'
             }
-            if(role.value=='pengawas' && isDone.value){
+            if (role.value == 'pengawas' && isDone.value) {
                 params.value.status = 'approve'
             }
             const data = {
-                nm_sls : slsNama.value,
-                kd_sls : slsKode.value,
-                jml_segmen : jumlahSegmen.value,
-                seg : listSegmen.value,
-                is_done : isDone.value,
-                catatan : catatan.value
+                nm_sls: slsNama.value,
+                kd_sls: slsKode.value,
+                jml_segmen: jumlahSegmen.value,
+                seg: listSegmen.value,
+                is_done: isDone.value,
+                catatan: catatan.value
             }
             params.value.data = data
             await axios.post(`${apiUrl}/data`, params.value, {
