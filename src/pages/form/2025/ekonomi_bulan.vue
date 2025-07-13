@@ -10,25 +10,16 @@ input {
             <v-sheet class="mx-auto">
                 <v-form fast-fail @submit.prevent ref="form">
                     <v-container>
-
-                        <v-row no-gutters>
-                            <v-col cols="2" sm="2">
-                                <LogoBPS></LogoBPS>
-                            </v-col>
-                            <v-col cols="8" sm="8">
-                                <h2>Survei Ekonomi Bulan I Tahun 2025</h2>
-                            </v-col>
-                            <v-col cols="2" sm="2">
-                                <LogoBPS></LogoBPS>
-                            </v-col>
-                        </v-row>
                         <v-card>
                             <v-tabs v-model="tab" bg-color="deep-orange-accent-2">
-                                <v-tab value="blok_3">Blok III</v-tab>
-                                <v-tab value="blok_2">Blok II</v-tab>
-                                <v-tab value="blok_1">Blok I</v-tab>
                                 <v-tab value="about">Tentang</v-tab>
-
+                                <v-tab value="blok_1">Blok I</v-tab>
+                                <v-tab value="blok_2">Blok II</v-tab>
+                                <v-tab value="blok_3">Blok III</v-tab>
+                                <v-tab value="blok_4">Blok IV</v-tab>
+                                <v-tab value="blok_5">Blok V</v-tab>
+                                <v-tab value="blok_6">Blok VI</v-tab>
+                                <v-tab value="blok_7">Blok VII</v-tab>
                             </v-tabs>
 
                             <v-card-text>
@@ -399,42 +390,367 @@ input {
                                                     </v-expansion-panels>
                                                     <br>
                                                     <v-text-field v-model="r302" label="Nilai dalam satu bulan"
-                                                        type="number" clearable
+                                                        type="number" clearable hint="Dalam Ribu (000) Rupiah"
                                                         append-inner-icon="mdi-information-outline"
                                                         variant="underlined"></v-text-field>
-                                                    <span>Tuliskan 2 pendapatan lainnya yang terbesar selama satu bulan</span>
+                                                    <span>Tuliskan 2 pendapatan lainnya yang terbesar selama satu
+                                                        bulan</span>
                                                     <v-row>
                                                         <v-col cols="12" sm="6">
-                                                            <v-text-field v-model="r302_1_text" label="Nama Pendapatan Lainnya ke-1"
-                                                                type="text" clearable
-                                                                append-inner-icon="mdi-information-outline"
+                                                            <v-text-field v-model="r302_1_text"
+                                                                label="Nama Pendapatan Lainnya ke-1" type="text"
+                                                                clearable append-inner-icon="mdi-information-outline"
                                                                 variant="underlined"></v-text-field>
                                                         </v-col>
                                                         <v-col cols="12" sm="6">
-                                                            <v-text-field v-model="r302_1_value" label="Nilai Pendapatan Lainnya ke-1 dalam satu bulan"
-                                                                type="number" clearable
+                                                            <v-text-field v-model="r302_1_value"
+                                                                label="Nilai Pendapatan Lainnya ke-1 dalam satu bulan"
+                                                                hint="Dalam Ribu (000) Rupiah" type="number" clearable
                                                                 append-inner-icon="mdi-information-outline"
                                                                 variant="underlined"></v-text-field>
                                                         </v-col>
                                                     </v-row>
                                                     <v-row>
                                                         <v-col cols="12" sm="6">
-                                                            <v-text-field v-model="r302_2_text" label="Nama Pendapatan Lainnya ke-2"
-                                                                type="text" clearable
-                                                                append-inner-icon="mdi-information-outline"
+                                                            <v-text-field v-model="r302_2_text"
+                                                                label="Nama Pendapatan Lainnya ke-2" type="text"
+                                                                clearable append-inner-icon="mdi-information-outline"
                                                                 variant="underlined"></v-text-field>
                                                         </v-col>
                                                         <v-col cols="12" sm="6">
-                                                            <v-text-field v-model="r302_2_value" label="Nilai Pendapatan Lainnya ke-2 dalam satu bulan"
-                                                                type="number" clearable
+                                                            <v-text-field v-model="r302_2_value"
+                                                                label="Nilai Pendapatan Lainnya ke-2 dalam satu bulan"
+                                                                type="number" clearable hint="Dalam Ribu (000) Rupiah"
                                                                 append-inner-icon="mdi-information-outline"
                                                                 variant="underlined"></v-text-field>
                                                         </v-col>
                                                     </v-row>
                                                     <v-text-field v-model="r303" label="303. Total Pendapatan"
-                                                                type="text" clearable
-                                                                append-inner-icon="mdi-information-outline" hint="Jumlah rincian pendapatan utama dan pendapatan lainnya"
+                                                        type="number" clearable
+                                                        append-inner-icon="mdi-information-outline"
+                                                        hint="Jumlah rincian pendapatan utama dan pendapatan lainnya Dalam Ribu (000) Rupiah"
+                                                        variant="underlined"></v-text-field>
+                                                </v-sheet>
+                                            </v-col>
+                                        </v-row>
+                                    </v-tabs-window-item>
+
+                                    <v-tabs-window-item value="blok_4">
+                                        <v-row no-gutters>
+                                            <v-col cols="12">
+                                                <v-sheet class="pa-2" color="deep-orange-lighten-2">
+                                                    <b>IV. PENGELUARAN UNTUK TENAGA KERJA</b>
+                                                </v-sheet>
+                                                <v-sheet class="pa-2" color="deep-orange-lighten-4">
+                                                    <span>401. Upah, Gaji, dan Jaminan sosial pemberi kerja (pensiun dan
+                                                        non-pensiun)</span>
+                                                    <li>Upah dan gaji dapat berupa pendapatan yang diterima secara tetap
+                                                        dan teratur atau pendapatan lain di
+                                                        luar upah/gaji (honorarium, lembur, dan sejenisnya) baik berupa
+                                                        uang maupun barang.</li>
+                                                    <li>Contoh non-pensiun: jaminan kesehatan, jaminan kecelakaan kerja,
+                                                        dsb</li>
+                                                    <v-expansion-panels color="deep-orange-lighten-2">
+                                                        <v-expansion-panel>
+                                                            <v-expansion-panel-title>
+                                                                <template v-slot:default="{ expanded }">
+                                                                    <v-row no-gutters>
+                                                                        <v-col class="d-flex justify-start" cols="12">
+                                                                            Petunjuk 401
+                                                                        </v-col>
+                                                                    </v-row>
+                                                                </template>
+                                                            </v-expansion-panel-title>
+                                                            <v-expansion-panel-text>
+                                                                <v-row>
+                                                                    <v-col cols="12" md="6">
+                                                                        <strong>Termasuk</strong>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Komisi dan tips untuk karyawan
+                                                                        </p>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Bonus
+                                                                        </p>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Pembayaran cuti tahunan dan jenis cuti
+                                                                            lainnya
+                                                                        </p>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Opsi saham karyawan
+                                                                        </p>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Jaminan sosial pemberi kerja (pensiun dan
+                                                                            non-pensiun)
+                                                                        </p>
+                                                                    </v-col>
+                                                                    <v-col cols="12" md="6">
+                                                                        <strong>Tidak Termasuk</strong>
+                                                                        <p><v-icon color="red">mdi-close-circle
+                                                                            </v-icon>
+                                                                            Pekerja yang bukan pegawai perusahaan
+                                                                            seperti
+                                                                            konsultan, Bonus kontraktor, dan orang
+                                                                            yang dibayar dengan komisi
+                                                                        </p>
+                                                                        <p><v-icon color="red">mdi-close-circle
+                                                                            </v-icon>
+                                                                            Pajak penghasilan
+                                                                        </p>
+                                                                    </v-col>
+                                                                </v-row>
+                                                            </v-expansion-panel-text>
+                                                        </v-expansion-panel>
+                                                    </v-expansion-panels>
+                                                    <br>
+                                                    <v-text-field v-model="r401" label="Nilai dalam satu bulan"
+                                                        hint="Dalam Ribu (000) Rupiah" type="number" clearable
+                                                        append-inner-icon="mdi-information-outline"
+                                                        variant="underlined"></v-text-field>
+                                                </v-sheet>
+
+                                            </v-col>
+                                        </v-row>
+                                    </v-tabs-window-item>
+
+                                    <v-tabs-window-item value="blok_5">
+                                        <v-row no-gutters>
+                                            <v-col cols="12">
+                                                <v-sheet class="pa-2" color="deep-orange-lighten-2">
+                                                    <b>V. PENAMBAHAN DAN PELEPASAN ASET TETAP</b>
+                                                </v-sheet>
+                                                <v-sheet class="pa-2" color="deep-orange-lighten-4">
+                                                    <span>501. Upah, Gaji, dan Jaminan sosial pemberi kerja (pensiun dan
+                                                        non-pensiun).</span>
+                                                    <li>Termasuk semua biaya yang dikapitalisasi, pembayaran progres
+                                                        kepada kontraktor untuk pekerjaan
+                                                        barang modal yang dilakukannya serta aset yang diperoleh melalui
+                                                        sewa pembiayaan.</li>
+                                                    <li>Silakan laporkan penambahan dan pelepasan untuk setiap jenis
+                                                        aset yang usia pakainya lebih dari satu
+                                                        tahun.</li>
+                                                    <li>Jika nilai yang tepat tidak tersedia, berikan perkiraan yang
+                                                        cermat.</li>
+                                                    <li>Untuk penambahan, pencatatan berdasarkan accrual basis ditambah
+                                                        barang modal dalam proses selama
+                                                        periode pencatatan.</li>
+                                                    <li>Untuk pelepasan, laporkan aset yang dilepas (dijual atau
+                                                        diberikan ke pihak lain) berdasarkan
+                                                        jenisnya (tidak termasuk aset yang habis masa pakai).</li>
+
+                                                    <v-expansion-panels color="deep-orange-lighten-2">
+                                                        <v-expansion-panel>
+                                                            <v-expansion-panel-title>
+                                                                <template v-slot:default="{ expanded }">
+                                                                    <v-row no-gutters>
+                                                                        <v-col class="d-flex justify-start" cols="12">
+                                                                            Petunjuk 501
+                                                                        </v-col>
+                                                                    </v-row>
+                                                                </template>
+                                                            </v-expansion-panel-title>
+                                                            <v-expansion-panel-text>
+                                                                <v-row>
+                                                                    <v-col cols="12" md="6">
+                                                                        <strong>Termasuk</strong>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Aset yang diperoleh melalui sewa pembiayaan
+                                                                        </p>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Biaya aset kapital yang dikembangkan sendiri
+                                                                            oleh pegawai perusahaan/organisasi
+                                                                            ini
+                                                                        </p>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Tanah
+                                                                        </p>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Gedung dan bangunan
+                                                                        </p>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Mesin dan perlengkapan
+                                                                        </p>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Kendaraan
+                                                                        </p>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Perlengkapan lainnya
+                                                                        </p>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Hewan dan tanaman yang menghasilkan berulang
+                                                                        </p>
+                                                                        <p><v-icon
+                                                                                color="green">mdi-check-circle</v-icon>
+                                                                            Produk kekayaan intelektual
+                                                                        </p>
+                                                                    </v-col>
+                                                                    <v-col cols="12" md="6">
+                                                                        <strong>Tidak Termasuk</strong>
+                                                                        <p><v-icon color="red">mdi-close-circle
+                                                                            </v-icon>
+                                                                            Aset yang berdasar sewa operasi
+                                                                        </p>
+                                                                    </v-col>
+                                                                </v-row>
+                                                            </v-expansion-panel-text>
+
+                                                        </v-expansion-panel>
+                                                    </v-expansion-panels>
+                                                    <br>
+                                                    <span>501.a. Penambahan</span>
+                                                    <v-text-field v-model="r501_a" label="Nilai dalam satu bulan"
+                                                        hint="Dalam Ribu (000) Rupiah" type="number" clearable
+                                                        append-inner-icon="mdi-information-outline"
+                                                        variant="underlined"></v-text-field>
+                                                    <span>501.b. Pelepasan</span>
+                                                    <v-text-field v-model="r501_b" label="Nilai dalam satu bulan"
+                                                        hint="Dalam Ribu (000) Rupiah" type="number" clearable
+                                                        append-inner-icon="mdi-information-outline"
+                                                        variant="underlined"></v-text-field>
+                                                </v-sheet>
+                                            </v-col>
+                                        </v-row>
+                                    </v-tabs-window-item>
+
+                                    <v-tabs-window-item value="blok_6">
+                                        <v-row no-gutters>
+                                            <v-col cols="12">
+                                                <v-sheet class="pa-2" color="deep-orange-lighten-2">
+                                                    <b>VI. CATATAN, KOMENTAR, DAN WAKTU PENGISIAN KUESIONER</b>
+                                                </v-sheet>
+                                                <v-sheet class="pa-2" color="deep-orange-lighten-4">
+                                                    <span>601. Catatan</span>
+                                                    <li>Tuliskan keterangan tambahan yang perlu disampaikan untuk
+                                                        memperjelas isian jawaban atau catatan
+                                                        jika ada pertanyaan yang tidak bisa diisi.</li>
+                                                    <v-textarea v-model="r601" variant="underlined"
+                                                        :disabled="mode == 'view'"></v-textarea>
+                                                    <span>602. Komentar dan Saran</span>
+                                                    <li>Tuliskan segala informasi terkait dengan isian kuesioner ini
+                                                        seperti faktor yang menyebabkan
+                                                        perubahan signifikan pada perusahaan (inflasi, kompetisi,
+                                                        kebijakan pajak), kesulitan dalam
+                                                        pengisian, serta informasi lain yang tidak bisa dituliskan pada
+                                                        pertanyaan sebelumnya</li>
+                                                    <v-textarea v-model="r602_a" variant="underlined"
+                                                        :disabled="mode == 'view'"></v-textarea>
+                                                    <li>Tuliskan saran untuk perbaikan kuesioner ini</li>
+                                                    <v-textarea v-model="r602_b" variant="underlined"
+                                                        :disabled="mode == 'view'"></v-textarea>
+                                                    <span>603. Estimasi waktu yang diperlukan dalam mengisi
+                                                        kuesioner</span>
+                                                    <li>Waktu yang diperlukan untuk membaca instruksi, menjawab
+                                                        pertanyaan, dan mendapatkan informasi</li>
+                                                    <li>Waktu yang diperlukan untuk mengumpulkan dan menyediakan
+                                                        informasi ini</li>
+                                                    <v-row>
+                                                        <v-col cols="4">
+                                                            <v-text-field v-model="r603_a" label="Hari" type="number"
+                                                                clearable append-inner-icon="mdi-information-outline"
                                                                 variant="underlined"></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="4">
+                                                            <v-text-field v-model="r603_b" label="Jam" type="number"
+                                                                clearable append-inner-icon="mdi-information-outline"
+                                                                variant="underlined"></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="4">
+                                                            <v-text-field v-model="r603_c" label="Menit" type="number"
+                                                                clearable append-inner-icon="mdi-information-outline"
+                                                                variant="underlined"></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-sheet>
+                                            </v-col>
+                                        </v-row>
+                                    </v-tabs-window-item>
+
+                                    <v-tabs-window-item value="blok_7">
+                                        <v-row no-gutters>
+                                            <v-col cols="12">
+                                                <v-sheet class="pa-2" color="deep-orange-lighten-2">
+                                                    <b>VII. NARAHUBUNG DAN KETERANGAN PENGESAHAN</b>
+                                                </v-sheet>
+                                                <v-sheet class="pa-2" color="deep-orange-lighten-4">
+                                                    <span>701. Narahubung</span>
+                                                    <li>Tuliskan informasi narahubung yang bertanggung jawab dalam
+                                                        pengisian kuesioner, jika terdapat
+                                                        beberapa pertanyaan yang akan ditanyakan terkait informasi yang
+                                                        telah diberikan </li>
+                                                    <v-text-field v-model="r701_a" label="a. Nama" type="text" clearable
+                                                        append-inner-icon="mdi-information-outline"
+                                                        variant="underlined"></v-text-field>
+                                                    <v-text-field v-model="r701_b" label="b. Jabatan" type="text"
+                                                        clearable append-inner-icon="mdi-information-outline"
+                                                        variant="underlined"></v-text-field>
+                                                    <v-row>
+                                                        <v-col cols="12" md="6">
+                                                            <v-text-field v-model="r701_c1" label="c. Telepon"
+                                                                type="text" clearable
+                                                                append-inner-icon="mdi-information-outline"
+                                                                variant="underlined"></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" md="6">
+                                                            <v-text-field v-model="r701_c2" label="c. Fax" type="text"
+                                                                clearable append-inner-icon="mdi-information-outline"
+                                                                variant="underlined"></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-text-field v-model="r701_d" label="d. Email" type="text"
+                                                        clearable append-inner-icon="mdi-information-outline"
+                                                        variant="underlined"></v-text-field>
+                                                    <span>702. Keterangan Pengesahan</span>
+                                                    <li>Data yang tercantum dalam daftar isian ini diisi dengan
+                                                        sebenarnya dan menurut keadaan yang
+                                                        sesungguhnya</li>
+                                                    <v-text-field v-model="r702_a" label="a. Nama" type="text" clearable
+                                                        append-inner-icon="mdi-information-outline"
+                                                        variant="underlined"></v-text-field>
+                                                    <v-text-field v-model="r702_b" label="b. Jabatan" type="text"
+                                                        clearable append-inner-icon="mdi-information-outline"
+                                                        variant="underlined"></v-text-field>
+                                                    <v-row>
+                                                        <v-col cols="12" md="6">
+                                                            <v-text-field v-model="r702_c1" label="c. Telepon"
+                                                                type="text" clearable
+                                                                append-inner-icon="mdi-information-outline"
+                                                                variant="underlined"></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" md="6">
+                                                            <v-text-field v-model="r702_c2" label="c. Fax" type="text"
+                                                                clearable append-inner-icon="mdi-information-outline"
+                                                                variant="underlined"></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-text-field v-model="r702_d" label="d. Email" type="text"
+                                                        clearable append-inner-icon="mdi-information-outline"
+                                                        variant="underlined"></v-text-field>
+                                                        <!--
+                                                    <v-card class="pa-4">
+                                                        <v-card-title>Input Tanda Tangan</v-card-title>
+                                                        <v-card-text>
+                                                            <canvas ref="canvas" width="500" height="200"
+                                                                style="border:1px solid #ccc; border-radius: 8px;"></canvas>
+                                                        </v-card-text>
+                                                        <v-card-actions>
+                                                            <v-btn color="primary" @click="clear">Hapus</v-btn>
+                                                            <v-btn color="success" @click="save">Simpan</v-btn>
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                    <v-date-picker v-model="r702_f"></v-date-picker>
+                                                    -->
                                                 </v-sheet>
                                             </v-col>
                                         </v-row>
@@ -442,66 +758,6 @@ input {
                                 </v-tabs-window>
                             </v-card-text>
                         </v-card>
-
-                        <v-row no-gutters>
-                            <v-col cols="12" sm="6">
-                                <v-sheet class="pa-2">
-                                    <v-text-field v-model="slsNama" label="1. Nama SLS" type="text" clearable
-                                        append-inner-icon="mdi-information-outline" variant="underlined"
-                                        disabled></v-text-field>
-                                </v-sheet>
-                            </v-col>
-                            <v-col cols="12" sm="6">
-                                <v-sheet class="pa-2">
-                                    <v-text-field v-model="slsKode" label="2. Kode SLS" type="text" clearable
-                                        append-inner-icon="mdi-information-outline" variant="underlined"
-                                        disabled></v-text-field>
-                                </v-sheet>
-                            </v-col>
-                            <v-col cols="12" sm="6">
-                                <v-sheet class="pa-2">
-                                    <v-text-field v-model="jumlahSegmen" :rules="jumlahSegmenRules"
-                                        label="3. Jumlah Segmen" type="number" clearable
-                                        append-inner-icon="mdi-information-outline" variant="underlined"
-                                        :disabled="mode == 'view'" :error="!!errorJumlahSegmen"
-                                        :error-messages="errorJumlahSegmen"></v-text-field>
-                                    <div v-if="jumlahSegmen > 0">
-                                        <span>4. Tuliskan detail segmen.</span>
-                                        <p></p>
-                                        <span>Muatan Segmen adalah muatan yang ada di <b><i>LKM Blok 3 Kolom
-                                                    11</i></b></span>
-                                        <div v-for="(item, index) in listSegmen" :key="index" class="mt-2">
-                                            <v-sheet border class="pa-2">
-                                                <span>{{ 'Segmen ke-' + (parseInt(index) + 1).toString() }}</span>
-                                                <v-text-field v-model="listSegmen[index].nomor"
-                                                    :rules="[nomorSegmenRules]"
-                                                    :label="'4.' + (parseInt(index) + 1).toString() + '. Nomor Segmen'"
-                                                    append-icon="mdi-delete" @click:append="removeSegmen(index)"
-                                                    :disabled="mode == 'view'" placeholder="01"></v-text-field>
-                                                <v-text-field v-model="listSegmen[index].muatan"
-                                                    :rules="[muatanSegmenRules]" type="number"
-                                                    :label="'4.' + (parseInt(index) + 1).toString() + '. Muatan Segmen'"
-                                                    :disabled="mode == 'view'"></v-text-field>
-                                                <v-checkbox v-model="listSegmen[index].is_done"
-                                                    :label="'4.' + (parseInt(index) + 1).toString() + '. Tandai segmen ke-' + (parseInt(index) + 1).toString() + ' selesai.'"
-                                                    :disabled="mode == 'view'"></v-checkbox>
-                                            </v-sheet>
-                                        </div>
-                                    </div>
-                                </v-sheet>
-                            </v-col>
-                            <v-col cols="12" sm="6">
-                                <v-sheet>
-                                    <v-checkbox v-model="isDone"
-                                        label="Tandai seluruh segmen pada SLS ini selesai didata."
-                                        :disabled="mode == 'view'"></v-checkbox>
-                                </v-sheet>
-                                <v-sheet class="pa-2">
-                                    <v-textarea v-model="catatan" label="5. Catatan" variant="underlined"
-                                        :disabled="mode == 'view'"></v-textarea>
-                                </v-sheet>
-                            </v-col>
-                        </v-row>
                         <v-row>
                             <v-col cols="12" sm="4">
                                 <v-btn class="pd-2" type="submit" block rounded="lg" color="indigo-darken-3"
@@ -523,6 +779,11 @@ import { ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import Swal from 'sweetalert2'
 import axios from 'axios';
+//import SignaturePad from 'signature_pad'
+
+//const canvas = ref(null)
+//let signaturePad = null
+
 const apiUrl = import.meta.env.VITE_API_URL;
 const token = localStorage.getItem('token')
 const user = JSON.parse(localStorage.getItem('user'))
@@ -575,6 +836,48 @@ const r302_2_text = ref()
 const r302_2_value = ref()
 const r303 = ref()
 
+//variable blok 4
+const r401 = ref()
+
+//variable blok 5
+const r501_a = ref()
+const r501_b = ref()
+
+//variable blok 6
+const r601 = ref()
+const r602_a = ref()
+const r602_b = ref()
+const r603_a = ref()
+const r603_b = ref()
+const r603_c = ref()
+
+//variable blok 7
+const r701_a = ref()
+const r701_b = ref()
+const r701_c1 = ref()
+const r701_c2 = ref()
+const r701_d = ref()
+const r702_a = ref()
+const r702_b = ref()
+const r702_c1 = ref()
+const r702_c2 = ref()
+const r702_d = ref()
+const r702_f = ref()
+
+//TTD
+const clear = () => {
+    signaturePad.clear()
+}
+
+const save = () => {
+    if (signaturePad.isEmpty()) {
+        alert('Tanda tangan belum diisi!')
+    } else {
+        const dataUrl = signaturePad.toDataURL()
+        console.log('Data URL:', dataUrl)
+        // Kirim ke server atau simpan di state
+    }
+}
 
 const slsNama = ref('Nama SLS')
 const slsKode = ref('Kode SLS')
@@ -707,6 +1010,7 @@ const submit = async () => {
 }
 
 onMounted(async () => {
+    //signaturePad = new SignaturePad(canvas.value)
     try {
         await axios.get(`${apiUrl}/data`, {
             headers: {
