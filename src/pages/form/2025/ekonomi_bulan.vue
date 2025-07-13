@@ -1011,6 +1011,7 @@ const submit = async () => {
 
 onMounted(async () => {
     //signaturePad = new SignaturePad(canvas.value)
+    /*
     try {
         await axios.get(`${apiUrl}/data`, {
             headers: {
@@ -1031,6 +1032,7 @@ onMounted(async () => {
     } catch (error) {
         console.log(error)
     }
+        */
 })
 
 </script>
