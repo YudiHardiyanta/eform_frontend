@@ -12,6 +12,7 @@ input {
                     <v-container>
                         <v-card>
                             <v-tabs v-model="tab" bg-color="deep-orange-accent-2">
+                                <v-tab value="blok_7">Blok VII</v-tab>
                                 <v-tab value="about">Tentang</v-tab>
                                 <v-tab value="blok_1">Blok I</v-tab>
                                 <v-tab value="blok_2">Blok II</v-tab>
@@ -737,11 +738,11 @@ input {
                                                     <v-text-field v-model="r702_d" label="d. Email" type="text"
                                                         clearable append-inner-icon="mdi-information-outline"
                                                         variant="underlined"></v-text-field>
-                                                        <!--
-                                                    <v-card class="pa-4">
-                                                        <v-card-title>Input Tanda Tangan</v-card-title>
+                                                    
+                                                    <v-card >
+                                                        <v-card-title>e. Tanda Tangan</v-card-title>
                                                         <v-card-text>
-                                                            <canvas ref="canvas" width="500" height="200"
+                                                            <canvas ref="canvas" 
                                                                 style="border:1px solid #ccc; border-radius: 8px;"></canvas>
                                                         </v-card-text>
                                                         <v-card-actions>
@@ -749,8 +750,34 @@ input {
                                                             <v-btn color="success" @click="save">Simpan</v-btn>
                                                         </v-card-actions>
                                                     </v-card>
-                                                    <v-date-picker v-model="r702_f"></v-date-picker>
-                                                    -->
+                                                    
+                                                    <v-text-field v-model="r702_f_formated" label="f. Tanggal Pengesahan"
+                                                        type="text" clearable
+                                                        append-inner-icon="mdi-information-outline" variant="underlined"
+                                                        hint="Format yyyy-mm-dd. Contoh : 2025-08-17">
+                                                        <template v-slot:append>
+                                                            <v-dialog max-width="500">
+                                                                <template v-slot:activator="{ props: activatorProps }">
+                                                                    <v-btn v-bind="activatorProps" class="pd-2" block rounded="lg"
+                                                                        color="deep-orange-lighten-2"
+                                                                        v-if="(mode == 'edit')" @click="">Atur</v-btn>
+                                                                </template>
+
+                                                                <template v-slot:default="{ isActive }">
+                                                                    <v-card title="Atur Tanggal Pengesahan">
+                                                                        <v-date-picker v-model="r702_f" color="deep-orange-lighten-2" ></v-date-picker>
+                                                                        <v-card-actions>
+                                                                            <v-spacer></v-spacer>
+                                                                            <v-btn text="Tutup"
+                                                                                @click="isActive.value = false"></v-btn>
+                                                                        </v-card-actions>
+                                                                    </v-card>
+                                                                </template>
+                                                            </v-dialog>
+                                                        </template>
+                                                    </v-text-field>
+                                                    
+
                                                 </v-sheet>
                                             </v-col>
                                         </v-row>
@@ -775,14 +802,15 @@ input {
 
 
 //
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import Swal from 'sweetalert2'
 import axios from 'axios';
-//import SignaturePad from 'signature_pad'
+import dayjs from 'dayjs'
+import SignaturePad from 'signature_pad'
 
-//const canvas = ref(null)
-//let signaturePad = null
+const canvas = ref(null)
+let signaturePad = null
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const token = localStorage.getItem('token')
@@ -863,6 +891,13 @@ const r702_c1 = ref()
 const r702_c2 = ref()
 const r702_d = ref()
 const r702_f = ref()
+
+
+const r702_f_formated = computed(() => {
+  return r702_f.value
+    ? dayjs(r702_f.value).format('YYYY-MM-DD')
+    : ''
+})
 
 //TTD
 const clear = () => {
@@ -1010,8 +1045,9 @@ const submit = async () => {
 }
 
 onMounted(async () => {
-    //signaturePad = new SignaturePad(canvas.value)
-    /*
+
+    
+    
     try {
         await axios.get(`${apiUrl}/data`, {
             headers: {
@@ -1019,20 +1055,13 @@ onMounted(async () => {
             },
             params: params.value
         }).then(response => {
-            slsNama.value = response.data.data.MSLS.nama
-            slsKode.value = response.data.data.MSLS.kode
-            if (response.data.data.answerKegiatan.length > 0) {
-                jumlahSegmen.value = response.data.data.answerKegiatan[0].answer.jml_segmen
-                listSegmen.value = response.data.data.answerKegiatan[0].answer.seg
-                isDone.value = response.data.data.answerKegiatan[0].answer.is_done
-            }
+            signaturePad = new SignaturePad(canvas.value)
             catatan.value = response.data.data.catatan
             role.value = response.data.role
         })
     } catch (error) {
         console.log(error)
     }
-        */
 })
 
 </script>
