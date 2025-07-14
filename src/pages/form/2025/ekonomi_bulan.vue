@@ -12,7 +12,6 @@ input {
                     <v-container>
                         <v-card>
                             <v-tabs v-model="tab" bg-color="deep-orange-accent-2">
-                                <v-tab value="blok_7">Blok VII</v-tab>
                                 <v-tab value="about">Tentang</v-tab>
                                 <v-tab value="blok_1">Blok I</v-tab>
                                 <v-tab value="blok_2">Blok II</v-tab>
