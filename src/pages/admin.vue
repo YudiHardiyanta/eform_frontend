@@ -2,10 +2,8 @@
     <AppMenuBar />
     <v-card>
         <v-tabs v-model="tab" bg-color="primary">
+            <v-tab value="m_alokasi">Alokasi</v-tab>
             <v-tab value="m_user">User</v-tab>
-            <v-tab value="m_wil">Wilayah</v-tab>
-            <v-tab value="m_usaha">Perusahaan</v-tab>
-            <v-tab value="m_kues">Kuesioner</v-tab>
         </v-tabs>
         <v-card-text>
             <v-tabs-window v-model="tab">
@@ -32,12 +30,11 @@
                                     color="orange-darken-3"></v-btn>
                             </div>
                         </template>
-                        <!--
+
                         <template v-slot:no-data>
                             <v-btn prepend-icon="mdi-backup-restore" rounded="lg" text="Reset data" variant="text"
-                                border @click="reset"></v-btn>
+                                border @click="reset_user_tabel"></v-btn>
                         </template>
-                        -->
                     </v-data-table>
                     <v-dialog v-model="user_dialog" width="auto">
                         <v-card prepend-icon="mdi-update" :title="dialog_title" min-width="400">
@@ -89,6 +86,63 @@
                                 <v-btn color="red" text="Batal" @click="user_reset_dialog = false"></v-btn>
                                 <v-btn text="Ok" @click="reset_pass()"></v-btn>
                             </template>
+
+                        </v-card>
+                    </v-dialog>
+                </v-tabs-window-item>
+                <v-tabs-window-item value="m_alokasi">
+                    <v-data-table :headers="headers_alokasi" :hide-default-footer="alokasi_items.length < 11"
+                        :items="alokasi_items" v-model:search="search" multi-sort>
+                        <template v-slot:top>
+                            <v-toolbar flat>
+                                <v-toolbar-title>
+                                    <v-icon color="medium-emphasis" icon="mdi-account-multiple" size="x-small"
+                                        start></v-icon>
+                                    Alokasi Petugas
+                                </v-toolbar-title>
+                                <v-spacer></v-spacer>
+                                <v-select v-model="kegiatan" :items=kegiatan_items item-title="Kegiatan.nama"
+                                    item-value="Kegiatan.id" variant="underlined" label="Pilih Kegiatan">
+                                </v-select>
+                                <v-spacer></v-spacer>
+                                <v-text-field v-model="search" density="compact" label="Cari"
+                                    prepend-inner-icon="mdi-magnify" variant="solo-filled" flat hide-details
+                                    single-line></v-text-field>
+                            </v-toolbar>
+                        </template>
+                        <template v-slot:item.actions="{ item }">
+                            <div class="d-flex ga-2 justify-end">
+                                <v-btn icon="mdi-pencil" size="x-small" @click="edit_alokasi_dialog(item.id)"></v-btn>
+                            </div>
+                        </template>
+
+                        <template v-slot:no-data>
+                            <v-btn prepend-icon="mdi-backup-restore" rounded="lg" text="Reset data" variant="text"
+                                border @click=""></v-btn>
+                        </template>
+                    </v-data-table>
+                    <v-dialog v-model="alokasi_dialog" width="auto">
+                        <v-card prepend-icon="mdi-update" :title="dialog_title" min-width="400">
+                            <v-card-text>
+
+                                <v-text-field v-model="kode_wilayah" label="Kode Wilayah" type="text" clearable
+                                    append-inner-icon="mdi-information-outline" variant="underlined"></v-text-field>
+
+                                <v-text-field v-model="nama_wilayah" label="Nama Wilayah" type="text" clearable
+                                    append-inner-icon="mdi-information-outline" variant="underlined"></v-text-field>
+
+                                <v-select v-model="pencacah" label="Pencacah" :items=pencacah_items
+                                    item-title="User.nama" item-value="User.email" variant="underlined"></v-select>
+
+                                <v-select v-model="pengawas" label="Pengawas" :items=pengawas_items
+                                    item-title="User.nama" item-value="User.email" variant="underlined"></v-select>
+
+                            </v-card-text>
+                            <template v-slot:actions class="justify-end">
+                                <v-btn color="red" text="Batal" @click="alokasi_dialog = false"></v-btn>
+                                <v-btn text="Ok" color="green" @click="edit_alokasi()"></v-btn>
+
+                            </template>
                         </v-card>
                     </v-dialog>
                 </v-tabs-window-item>
@@ -108,7 +162,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router';
 const router = useRouter();
 import axios from 'axios';
@@ -148,6 +202,34 @@ const headers_role = ref([
 const items_roles = ref([])
 
 const user_reset_dialog = ref(false)
+
+
+const kegiatan_items = ref([])
+
+const kegiatan = ref()
+
+const alokasi_items = ref([])
+
+const headers_alokasi = ref([
+    { "title": "Wilayah Id", "key": "wilayah_id", "align": 'start' },
+    { "title": "Nama Wilayah", "key": "nama", "align": 'start' },
+    { "title": "Email Pencacah", "key": "pencacah_email", "align": 'start' },
+    { "title": "Email Pengawas", "key": "pengawas_email", "align": 'start' },
+    { "title": "Aksi", "key": "actions", "value": "Aksi" }
+])
+
+const alokasi_dialog = ref(false)
+
+const kode_wilayah = ref()
+const nama_wilayah = ref()
+
+const pencacah_items = ref([])
+const pengawas_items = ref([])
+
+const pencacah = ref()
+const pengawas = ref()
+
+const id_alokasi = ref()
 
 const edit_user_dialog = async (email) => {
 
@@ -218,7 +300,7 @@ const reset_pass = async () => {
         params.value = {}
         params.value.email = email_user.value
         params.value.reset_pass = password_user.value
-        await axios.post(`${apiUrl}/user/reset_admin`,params.value, {
+        await axios.post(`${apiUrl}/user/reset_admin`, params.value, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -244,13 +326,11 @@ const reset_pass = async () => {
 
 const reset_user_tabel = async () => {
     try {
-        //get daftar user
         await axios.get(`${apiUrl}/user`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         }).then(response => {
-            reset_user_tabel()
             if (response.status === 200) {
                 items_users.value = response.data.data
             } else {
@@ -272,7 +352,145 @@ const reset_user_tabel = async () => {
     }
 }
 
-onMounted(async()=>{
+const get_daftar_kegiatan = async () => {
+    try {
+        await axios.get(`${apiUrl}/kegiatan`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then(response => {
+
+            kegiatan_items.value = response.data.data
+        })
+    } catch (error) {
+        Swal.fire({
+            title: "Oops!",
+            text: error.response.data.message,
+            icon: "error",
+            confirmButtonText: "OK"
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                router.push('/')
+            }
+        });
+    }
+}
+
+const get_daftar_alokasi = async (kegiatan_id) => {
+    try {
+        await axios.get(`${apiUrl}/sampel?id=${kegiatan_id}&status=all`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then(response => {
+            alokasi_items.value = response.data.data
+        })
+    } catch (error) {
+        Swal.fire({
+            title: "Oops!",
+            text: error.response.data.message,
+            icon: "error",
+            confirmButtonText: "OK"
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                router.push('/')
+            }
+        });
+    }
+}
+
+const get_user_kegiatan = async (kegiatan_id, role) => {
+    try {
+        await axios.get(`${apiUrl}/user?kegiatan_id=${kegiatan_id}&role=${role}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then(response => {
+            if (role == 'pencacah') {
+                pencacah_items.value = response.data.data
+            }
+            if (role == 'pengawas') {
+                pengawas_items.value = response.data.data
+            }
+
+        })
+    } catch (error) {
+        Swal.fire({
+            title: "Oops!",
+            text: error.response.data.message,
+            icon: "error",
+            confirmButtonText: "OK"
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                router.push('/')
+            }
+        });
+    }
+}
+
+const edit_alokasi_dialog = async (id) => {
+    try {
+        alokasi_dialog.value = true
+        dialog_title.value = 'Edit Alokasi'
+        await axios.get(`${apiUrl}/data?id=${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then(response => {
+            kode_wilayah.value = response.data.data.wilayah_id
+            nama_wilayah.value = response.data.data.nama
+            pencacah.value = response.data.data.pencacah_email
+            pengawas.value = response.data.data.pengawas_email
+            id_alokasi.value = response.data.data.id
+            //console.log(response.data.data)
+        })
+    } catch (error) {
+
+    }
+}
+
+const edit_alokasi = async () => {
+    try {
+        params.value = {}
+        params.value.kode_wilayah = kode_wilayah.value
+        params.value.nama_wilayah = nama_wilayah.value
+        params.value.pencacah = pencacah.value
+        params.value.pengawas = pengawas.value
+        params.value.id = id_alokasi.value
+        await axios.put(`${apiUrl}/sampel`, params.value,{
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then(response => {
+            alokasi_dialog.value = false
+            get_daftar_alokasi(kegiatan.value)
+            Swal.fire({
+                title: "Good job!",
+                text: response.data.message,
+                icon: "success"
+            }).then((result) => {
+
+            });
+        })
+    } catch (error) {
+
+    }
+}
+
+onMounted(async () => {
     reset_user_tabel()
+    get_daftar_kegiatan()
+
 })
+
+watch(kegiatan, async (newVal, oldVal) => {
+    get_daftar_alokasi(newVal)
+    get_user_kegiatan(newVal, 'pencacah')
+    get_user_kegiatan(newVal, 'pengawas')
+    //console.log(`Dipilih: ${newVal}, sebelumnya: ${oldVal}`)
+})
+
 </script>
