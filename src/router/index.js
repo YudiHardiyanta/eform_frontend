@@ -10,7 +10,8 @@ import { routes } from 'vue-router/auto-routes'
 import {jwtDecode} from 'jwt-decode';
 
 //mengatur path require login
-const pathLogin = ['/','/data','/kegiatan','/pendataan']
+const pathLogin = ['/','/data','/kegiatan','/pendataan','/admin']
+
 
 routes.forEach((element,index) => {
   if(pathLogin.includes(element.path)){
@@ -66,6 +67,7 @@ const  isTokenExpired = (token)=>{
     const decoded = jwtDecode(token);
     const user = {}
     user.nama = decoded.nama
+    user.role_utama=decoded.role_utama
     user.role = decoded.role
     localStorage.setItem('user', JSON.stringify(user))
     const currentTime = Date.now() / 1000; // detik
