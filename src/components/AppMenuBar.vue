@@ -16,14 +16,16 @@
                     <v-list-item>
                         <v-list-item-title>{{ user.nama }}</v-list-item-title>
                     </v-list-item>
+                    <v-list-item v-if="user.role_utama=='admin'">
+                        <v-btn  class="mt-2" text="Admin" type="button" block
+                                    rounded="lg" color="indigo-darken-3" href="/admin"></v-btn>
+                    </v-list-item>
                     <v-list-item>
 
 
                         <v-dialog max-width="500">
                             
                             <template v-slot:activator="{ props: activatorProps }">
-                                <v-btn v-if="user.role_utama=='admin'" v-bind="activatorProps" class="mt-2" text="Admin" type="button" block
-                                    rounded="lg" color="indigo-darken-3"></v-btn>
                                 <v-btn v-bind="activatorProps" class="mt-2" text="Reset Password" type="button" block
                                     rounded="lg" color="orange-darken-3"></v-btn>
                             </template>
