@@ -131,11 +131,11 @@
                                 <v-text-field v-model="nama_wilayah" label="Nama Wilayah" type="text" clearable
                                     append-inner-icon="mdi-information-outline" variant="underlined"></v-text-field>
 
-                                <v-select v-model="pencacah" label="Pencacah" :items=pencacah_items
-                                    item-title="User.nama" item-value="User.email" variant="underlined"></v-select>
+                                <v-autocomplete v-model="pencacah" label="Pencacah" :items=pencacah_items
+                                    item-title="User.nama" item-value="User.email" variant="underlined" ></v-autocomplete>
 
-                                <v-select v-model="pengawas" label="Pengawas" :items=pengawas_items
-                                    item-title="User.nama" item-value="User.email" variant="underlined"></v-select>
+                                <v-autocomplete v-model="pengawas" label="Pengawas" :items=pengawas_items
+                                    item-title="User.nama" item-value="User.email" variant="underlined" ></v-autocomplete>
 
                             </v-card-text>
                             <template v-slot:actions class="justify-end">
