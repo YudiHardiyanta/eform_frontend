@@ -19,6 +19,8 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
+    '/admin': RouteRecordInfo<'/admin', '/admin', Record<never, never>, Record<never, never>>,
+    '/cawi/2025/kerti_bali': RouteRecordInfo<'/cawi/2025/kerti_bali', '/cawi/2025/kerti_bali', Record<never, never>, Record<never, never>>,
     '/data': RouteRecordInfo<'/data', '/data', Record<never, never>, Record<never, never>>,
     '/form/2025/budaya': RouteRecordInfo<'/form/2025/budaya', '/form/2025/budaya', Record<never, never>, Record<never, never>>,
     '/form/2025/ekonomi_bulan': RouteRecordInfo<'/form/2025/ekonomi_bulan', '/form/2025/ekonomi_bulan', Record<never, never>, Record<never, never>>,
@@ -26,5 +28,6 @@ declare module 'vue-router/auto-routes' {
     '/kegiatan': RouteRecordInfo<'/kegiatan', '/kegiatan', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/pendataan': RouteRecordInfo<'/pendataan', '/pendataan', Record<never, never>, Record<never, never>>,
+    '/success': RouteRecordInfo<'/success', '/success', Record<never, never>, Record<never, never>>,
   }
 }
