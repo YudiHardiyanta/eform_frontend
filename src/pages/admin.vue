@@ -112,6 +112,7 @@
                         </template>
                         <template v-slot:item.actions="{ item }">
                             <div class="d-flex ga-2 justify-end">
+                                <v-btn icon="mdi-mail" size="x-small" @click="setting_email_dialog(item.id)"></v-btn>
                                 <v-btn icon="mdi-pencil" size="x-small" @click="edit_alokasi_dialog(item.id)"></v-btn>
                             </div>
                         </template>
@@ -132,15 +133,33 @@
                                     append-inner-icon="mdi-information-outline" variant="underlined"></v-text-field>
 
                                 <v-autocomplete v-model="pencacah" label="Pencacah" :items=pencacah_items
-                                    item-title="User.nama" item-value="User.email" variant="underlined" ></v-autocomplete>
+                                    item-title="User.nama" item-value="User.email"
+                                    variant="underlined"></v-autocomplete>
 
                                 <v-autocomplete v-model="pengawas" label="Pengawas" :items=pengawas_items
-                                    item-title="User.nama" item-value="User.email" variant="underlined" ></v-autocomplete>
+                                    item-title="User.nama" item-value="User.email"
+                                    variant="underlined"></v-autocomplete>
 
                             </v-card-text>
                             <template v-slot:actions class="justify-end">
                                 <v-btn color="red" text="Batal" @click="alokasi_dialog = false"></v-btn>
                                 <v-btn text="Ok" color="green" @click="edit_alokasi()"></v-btn>
+
+                            </template>
+                        </v-card>
+                    </v-dialog>
+
+                    <v-dialog v-model="email_dialog" width="auto">
+                        <v-card prepend-icon="mdi-mail" :title="dialog_title" min-width="400">
+                            <v-card-text>
+
+                                <v-text-field v-model="email" label="Email" type="text" clearable
+                                    append-inner-icon="mdi-information-outline" variant="underlined"></v-text-field>
+                                <v-checkbox v-model="ganti_token" label="Apakah Token diganti?"></v-checkbox>
+                            </v-card-text>
+                            <template v-slot:actions class="justify-end">
+                                <v-btn color="red" text="Batal" @click="email_dialog = false"></v-btn>
+                                <v-btn text="Ok" color="green" @click="kirim_email()"></v-btn>
 
                             </template>
                         </v-card>
@@ -230,6 +249,10 @@ const pencacah = ref()
 const pengawas = ref()
 
 const id_alokasi = ref()
+
+const email_dialog = ref(false)
+const email = ref()
+const ganti_token = ref()
 
 const edit_user_dialog = async (email) => {
 
@@ -460,7 +483,7 @@ const edit_alokasi = async () => {
         params.value.pencacah = pencacah.value
         params.value.pengawas = pengawas.value
         params.value.id = id_alokasi.value
-        await axios.put(`${apiUrl}/sampel`, params.value,{
+        await axios.put(`${apiUrl}/sampel`, params.value, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -485,6 +508,40 @@ onMounted(async () => {
     get_daftar_kegiatan()
 
 })
+
+const setting_email_dialog = async (id) => {
+    email_dialog.value = true
+    dialog_title.value = "Atur Email Pengiriman CAWI"
+    id_alokasi.value = id
+}
+
+const kirim_email = async () => {
+    try {
+        params.value = {}
+        params.value.id = id_alokasi.value
+        params.value.email = email.value
+        params.value.ganti_token = ganti_token.value
+        await axios.post(`${apiUrl}/sampel/email`, params.value, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then(response => {
+            email_dialog.value = false
+            get_daftar_alokasi(kegiatan.value)
+            Swal.fire({
+                title: "Good job!",
+                text: response.data.message,
+                icon: "success"
+            }).then((result) => {
+
+            });
+        })
+    } catch (error) {
+
+    }
+
+
+}
 
 watch(kegiatan, async (newVal, oldVal) => {
     get_daftar_alokasi(newVal)
