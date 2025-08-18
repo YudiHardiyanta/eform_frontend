@@ -133,7 +133,7 @@ const nomorSegmenRules = (value) => {
     if (!onlyNumber(value)) {
         return 'Nomor Segmen tidak boleh mengandung huruf';
     }
-    if (value.length > 2) {
+    if (value.length > 3) {
         return 'Nomor segmen tidak boleh melebihi 3 karakter';
     }
     return true; // Validasi berhasil jika nilai tidak kosong dan lebih dari 3 karakter
