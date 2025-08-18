@@ -109,7 +109,7 @@ const catatan = ref('')
 const jumlahSegmenRules = [
     value => {
         if (!value) return 'Jumlah Harus diisi';
-        if (value > 99 || value <= 0) return 'Masukan jumlah antara 1 - 99';
+        if (value > 149 || value <= 0) return 'Masukan jumlah antara 1 - 150';
         return true;
     },
 ]
