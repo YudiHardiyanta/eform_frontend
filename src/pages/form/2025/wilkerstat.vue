@@ -71,7 +71,9 @@ input {
                         </v-row>
                         <v-row>
                             <v-col cols="12" sm="4">
-                                <v-btn class="pd-2" type="submit" block rounded="lg" color="indigo-darken-3"
+                                <v-btn
+                                :disabled="isSubmitting"
+                                 class="pd-2" type="submit" block rounded="lg" color="indigo-darken-3"
                                     v-if="(mode == 'edit')" @click="submit">Simpan</v-btn>
                             </v-col>
                         </v-row>
@@ -103,6 +105,7 @@ const slsKode = ref('Kode SLS')
 const isDone = ref(false)
 
 const jumlahSegmen = ref()
+const isSubmitting = ref(false)
 
 const errorJumlahSegmen = ref()
 const catatan = ref('')
@@ -180,8 +183,10 @@ const role = ref()
 
 const submit = async () => {
     await form.value.validate().then(async (result) => {
+        isSubmitting.value = true
         if (jumlahSegmen.value != listSegmen.value.length) {
             errorJumlahSegmen.value = 'Jumlah Segmen tidak sesuai dengan daftar segmen'
+            isSubmitting.value = false
         }
         if (result.valid && (jumlahSegmen.value == listSegmen.value.length)) {
             params.value.catatan = catatan.value
@@ -213,9 +218,11 @@ const submit = async () => {
                         text: response.data.message,
                         icon: "success"
                     }).then((result) => {
+                        isSubmitting.value = false
                         router.back()
                     });
                 } else {
+                    isSubmitting.value = false
                     Swal.fire({
                         title: "Oops!",
                         text: response.data.message,
@@ -225,6 +232,7 @@ const submit = async () => {
 
             })
         }
+        isSubmitting.value = false
     })
 }
 
