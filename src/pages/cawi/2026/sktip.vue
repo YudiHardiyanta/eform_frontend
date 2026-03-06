@@ -1,0 +1,359 @@
+<style scoped>
+input {
+    text-transform: uppercase;
+}
+</style>
+
+<template>
+    <v-app-bar :elevation="2">
+        <!--
+        <template v-slot:prepend>
+            <v-app-bar-nav-icon></v-app-bar-nav-icon>
+        </template>
+-->
+        <template v-slot:prepend>
+            <v-img :width="60" aspect-ratio="1/1" cover rounded src="/bps.svg"></v-img>
+        </template>
+        <template v-slot:append>
+            <v-img :width="60" aspect-ratio="1/1" cover rounded src="/pem_bali.png"></v-img>
+        </template>
+        <v-app-bar-title>SURVEI KHUSUS TRIWULANAN INDIKATOR PRODUKSI 2026</v-app-bar-title>
+    </v-app-bar>
+    <v-sheet class="mx-auto" style="min-height:85vh">
+        <v-form fast-fail @submit.prevent ref="form">
+            <v-container>
+                <v-card>
+                    <v-tabs v-model="tab" bg-color="orange-darken-2">
+                        <v-tab value="blok_1">Blok I</v-tab>
+                        <v-tab value="blok_2">Blok II</v-tab>
+                        <v-tab value="blok_3">Blok III</v-tab>
+                        <v-tab value="blok_4">Blok IV</v-tab>
+                    </v-tabs>
+                </v-card>
+
+                <v-card-text>
+                    <v-tabs-window v-model="tab">
+                        <v-tabs-window-item value="blok_1">
+                            <v-row no-gutters>
+                                <v-col cols="12">
+                                    <v-sheet class="pa-2" color="deep-orange-lighten-4">
+                                        <p><b>Perhatian :</b></p>
+                                        <ol>
+                                            <li>1. Tujuan survei ini adalah untuk mengetahui produksi dan nilai produksi
+                                                triwulanan perusahaan/usaha</li>
+                                            <li>2. Hasil survei ini akan digunakan untuk bahan penyusunan PDRB
+                                                Triwulanan
+                                            </li>
+                                            <li>3. Pelaksanaan kegiatan ini berdasarkan Undang-Undang Nomor 16 Tahun
+                                                1997
+                                                tentang Statistik.</li>
+                                            <li>4. Kerahasiaan data yang diberikan dijamin oleh Undang-Undang Nomor 16
+                                                Tahun
+                                                1997 tentang Statistik.</li>
+                                            <li>5. Survei ini <b>tidak ada hubungannya</b> dengan <b>pajak</b>, dan
+                                                <b>tidak
+                                                    dipungut biaya.</b>
+                                            </li>
+
+                                        </ol>
+                                    </v-sheet>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-sheet class="pa-2" color="deep-orange-lighten-2">
+                                        <b>I. PENGENALAN TEMPAT</b>
+                                    </v-sheet>
+                                    <v-sheet class="pa-2" color="deep-orange-lighten-4">
+                                        <v-select v-model="r101" label="101. Provinsi *" :items=r101_items
+                                            item-title="nama" item-value="kode" variant="underlined"></v-select>
+                                        <v-select v-model="r102" label="102. Kabupaten/Kota *" :items=r102_items
+                                            item-title="nama" item-value="kode" variant="underlined"></v-select>
+                                        <v-select v-model="r103" label="103. Kecamatan *" :items=r103_items
+                                            item-title="nama" item-value="kode" variant="underlined"></v-select>
+                                        <v-select v-model="r104" label="104. Desa *" :items=r104_items item-title="nama"
+                                            item-value="kode" variant="underlined"></v-select>
+                                    </v-sheet>
+                                </v-col>
+
+                            </v-row>
+                        </v-tabs-window-item>
+                        <v-tabs-window-item value="blok_2">
+                            <v-row no-gutters>
+                                <v-col cols="12">
+                                    <v-sheet class="pa-2" color="deep-orange-lighten-2">
+                                        <b>II. INFORMASI UMUM</b>
+                                    </v-sheet>
+                                    <v-sheet class="pa-2" color="deep-orange-lighten-4">
+                                        <v-text-field v-model="r201" label="201. Nama Perusahaan/Pengusaha *"
+                                            type="text" clearable append-inner-icon="mdi-information-outline"
+                                            placeholder="Contoh : Jaya, PT atau Karya, CV"
+                                            variant="underlined"></v-text-field>
+                                        <v-textarea v-model="r202" label="202. Alamat *" variant="underlined"
+                                            :disabled="mode == 'view'"></v-textarea>
+                                        <v-text-field v-model="r203" label="203. No Telp /fax *" type="number" clearable
+                                            append-inner-icon="mdi-information-outline"
+                                            placeholder="Contoh : 081123123123" variant="underlined"></v-text-field>
+                                        <v-select v-model="r204" label="204. Kategori Perusahaan/Usaha *"
+                                            :items=r204_items item-title="nama" item-value="kode"
+                                            variant="underlined"></v-select>
+                                        <v-textarea v-model="r205" label="205. Tuliskan Aktivitas Perusahaan/Usaha *"
+                                            variant="underlined" :disabled="mode == 'view'"></v-textarea>
+                                        <v-autocomplete v-model="r205_kbli" :items="r205_kbli_items"
+                                            label="205. KBLI 2015" item-title="nama" item-value="kode" clearable
+                                            density="comfortable" variant="underlined"></v-autocomplete>
+                                    </v-sheet>
+                                </v-col>
+
+                            </v-row>
+                        </v-tabs-window-item>
+                        <v-tabs-window-item value="blok_3">
+                            <v-row no-gutters>
+                                <v-col cols="12">
+                                    <v-sheet class="pa-2" color="deep-orange-lighten-2">
+                                        <b>III. PRODUKSI DAN NILAI PRODUKSI</b>
+                                    </v-sheet>
+                                    <v-sheet class="pa-2" color="deep-orange-lighten-4">
+                                        <v-tabs v-model="tw" bg-color="orange-darken-2">
+                                            <v-tab v-for="tw_item in tw_items" :value="tw_item.kode">{{
+                                                tw_item.nama_singkat
+                                                }}</v-tab>
+                                        </v-tabs>
+                                        <v-tabs-window v-model="tw">
+                                            <v-tabs-window-item :value="tw_item.kode" v-for="tw_item in tw_items">
+                                                <v-row no-gutters>
+                                                    <v-col cols="12">
+                                                        <v-sheet class="pa-2" color="deep-orange-lighten-2">
+                                                            <b>{{ tw_item.nama_lengkap }}</b>
+                                                        </v-sheet>
+                                                        <br>
+                                                        <v-sheet class="pa-2" color="deep-orange-lighten-4">
+                                                            <span>301.a Produksi Perusahaan/Usaha
+                                                                :*</span>
+                                                            <v-row no-gutters v-for="r301a_item in tw_item.r301a">
+                                                                <v-col cols="4">
+                                                                    <v-sheet class="ma-2" color="deep-orange-lighten-4">
+                                                                        <v-text-field v-model="r301a_item.produksi"
+                                                                            label="Produksi" type="text" clearable
+                                                                            append-inner-icon="mdi-information-outline"
+                                                                            placeholder="Contoh : "
+                                                                            variant="underlined"></v-text-field>
+                                                                    </v-sheet>
+                                                                </v-col>
+                                                                <v-col cols="3">
+                                                                    <v-sheet class="ma-2" color="deep-orange-lighten-4">
+                                                                        <v-text-field v-model="r301a_item.satuan"
+                                                                            label="Satuan" type="text" clearable
+                                                                            append-inner-icon="mdi-information-outline"
+                                                                            placeholder=""
+                                                                            variant="underlined"></v-text-field>
+                                                                    </v-sheet>
+                                                                </v-col>
+                                                                <v-col cols="4">
+                                                                    <v-sheet class="ma-2" color="deep-orange-lighten-4">
+                                                                        <v-text-field
+                                                                            v-model="r301a_item.nilai_produksi"
+                                                                            label="Nilai Produksi" type="number"
+                                                                            clearable
+                                                                            append-inner-icon="mdi-information-outline"
+                                                                            placeholder="Dalam Rupiah, Contoh : 900000"
+                                                                            variant="underlined"></v-text-field>
+                                                                    </v-sheet>
+                                                                </v-col>
+                                                                <v-col cols="1">
+                                                                    <v-sheet class="pa-2 ma-2"
+                                                                        color="deep-orange-lighten-4">
+                                                                        <v-btn class="pd-2" type="btn" block
+                                                                            rounded="lg" color="deep-orange-lighten-2"
+                                                                            @click="del_list_produksi(tw_item.kode, r301a_item.id)">-</v-btn>
+                                                                    </v-sheet>
+                                                                </v-col>
+                                                            </v-row>
+                                                            <v-btn class="pd-2" type="btn" block rounded="lg"
+                                                                color="deep-orange-lighten-2"
+                                                                @click="tambah_produksi(tw_item.kode)">Tambah Hasil
+                                                                Produksi</v-btn>
+                                                            <br>
+                                                            <span>301.b Nilai Pendapatan (Rupiah)
+                                                                :*</span>
+                                                            <v-row no-gutters v-for="r301b_item in tw_item.r301b">
+                                                                <v-col cols="6">
+                                                                    <v-sheet class="ma-2" color="deep-orange-lighten-4">
+                                                                        <v-text-field
+                                                                            v-model="r301b_item.jenis_nilai_tambah"
+                                                                            label="Jenis Nilai Tambah" type="text"
+                                                                            clearable
+                                                                            append-inner-icon="mdi-information-outline"
+                                                                            placeholder="Contoh : "
+                                                                            variant="underlined"></v-text-field>
+                                                                    </v-sheet>
+                                                                </v-col>
+                                                                <v-col cols="5">
+                                                                    <v-sheet class="ma-2" color="deep-orange-lighten-4">
+                                                                        <v-text-field v-model="r301b_item.nilai_tambah"
+                                                                            label="Nilai Tambah" type="text" clearable
+                                                                            append-inner-icon="mdi-information-outline"
+                                                                            placeholder=""
+                                                                            variant="underlined"></v-text-field>
+                                                                    </v-sheet>
+                                                                </v-col>
+                                                                <v-col cols="1">
+                                                                    <v-sheet class="pa-2 ma-2"
+                                                                        color="deep-orange-lighten-4">
+                                                                        <v-btn class="pd-2" type="btn" block
+                                                                            rounded="lg" color="deep-orange-lighten-2"
+                                                                            @click="del_list_nilai_tambah(tw_item.kode, r301b_item.id)">-</v-btn>
+                                                                    </v-sheet>
+                                                                </v-col>
+                                                            </v-row>
+                                                            <v-btn class="pd-2" type="btn" block rounded="lg"
+                                                                color="deep-orange-lighten-2"
+                                                                @click="tambah_nilai_tambah(tw_item.kode)">Tambah Nilai
+                                                                Tambah</v-btn>
+
+                                                        </v-sheet>
+                                                        <br>
+                                                        <v-select v-model="tw_item.r302"
+                                                            label="302. Perkembangan produksi : *" :items=nilai_naik_turun
+                                                            item-title="nama" item-value="kode"
+                                                            variant="underlined"></v-select>
+                                                        <v-select v-model="tw_item.r303"
+                                                            label="303. Perkembangan pendapatan usaha : *" :items=nilai_naik_turun
+                                                            item-title="nama" item-value="kode"
+                                                            variant="underlined"></v-select>
+                                                        <v-text-field v-model="tw_item.r304" label="304. Persentase peningkatan/penurunan *"
+                                                            type="number" clearable
+                                                            append-inner-icon="mdi-information-outline"
+                                                            variant="underlined"></v-text-field>
+                                                        
+                                                        <v-textarea v-model="tw_item.r305" label="305. Alasan peningkatan/penurunan *"
+                                                            variant="underlined"
+                                                            :disabled="mode == 'view'"></v-textarea>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-tabs-window-item>
+
+                                        </v-tabs-window>
+                                    </v-sheet>
+                                </v-col>
+
+                            </v-row>
+                        </v-tabs-window-item>
+                        <v-tabs-window-item value="blok_4">
+                            <v-row no-gutters>
+                                <v-col cols="12">
+                                    <v-sheet class="pa-2" color="deep-orange-lighten-2">
+                                        <b>IV. CATATAN</b>
+                                    </v-sheet>
+                                    <v-sheet class="pa-2" color="deep-orange-lighten-4">
+                                        <v-textarea v-model="r401"
+                                            label="401. (Tuliskan fenomena kualitatif terkait naik turunnya produksi)"
+                                            variant="underlined" :disabled="mode == 'view'"></v-textarea>
+                                    </v-sheet>
+                                </v-col>
+
+                            </v-row>
+                        </v-tabs-window-item>
+                    </v-tabs-window>
+                    <br>
+                    <v-row justify="end">
+                        <v-col cols="12" sm="4">
+                            <v-btn class="pd-2" type="submit" block rounded="lg" color="deep-orange-lighten-2"
+                                @click="kirim_data(type = 1)">Simpan</v-btn>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+
+            </v-container>
+        </v-form>
+    </v-sheet>
+    <Footer></Footer>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { v4 as uuidv4 } from 'uuid'
+
+
+const tab = ref(null)
+const mode = ref('')
+//blok 1
+const r101_items = ref([{ kode: '51', nama: '51 - BALI' }])
+const r101 = ref()
+const r102_items = ref([{ kode: '51', nama: '51 - BALI' }])
+const r102 = ref()
+const r103_items = ref([{ kode: '51', nama: '51 - BALI' }])
+const r103 = ref()
+const r104_items = ref([{ kode: '51', nama: '51 - BALI' }])
+const r104 = ref()
+
+//blok 2
+const r201 = ref()
+const r202 = ref()
+const r203 = ref()
+const r204 = ref()
+const r204_items = ref([{ kode: '51', nama: '51 - BALI' }])
+const r205 = ref()
+
+const r205_kbli = ref()
+const r205_kbli_items = [
+    { kode: '51', nama: '51 - BALI' }
+]
+
+//blok 3
+const tw = ref()
+const tw_items = ref([
+    { kode: '202501', nama_singkat: '2025 TW I', nama_lengkap: '2025 Triwulan I', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0, r302: null, r303: null, r304: null, r305: null },
+    { kode: '202502', nama_singkat: '2025 TW II', nama_lengkap: '2025 Triwulan II', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0, r302: null, r303: null, r304: null, r305: null },
+    { kode: '202503', nama_singkat: '2025 TW III', nama_lengkap: '2025 Triwulan III', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0, r302: null, r303: null, r304: null, r305: null },
+    { kode: '202504', nama_singkat: '2025 TW IV', nama_lengkap: '2025 Triwulan IV', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0, r302: null, r303: null, r304: null, r305: null },
+    { kode: '202601', nama_singkat: '2026 TW I', nama_lengkap: '2026 Triwulan I', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0, r302: null, r303: null, r304: null, r305: null },
+])
+const r301 = ref()
+const tambah_produksi = (tw) => {
+    const item = tw_items.value.find(i => i.kode === tw)
+    const id = uuidv4()
+    if (item) {
+        item.r301a.push({ id: id, produksi: null, satuan: null, nilai_produksi: null })
+        item.r301a_length = item.r301a.length
+    }
+}
+
+const del_list_produksi = (tw, id) => {
+    const item = tw_items.value.find(i => i.kode === tw)
+    const index = item.r301a.findIndex(item => item.id === id)
+    if (index !== -1) {
+        item.r301a.splice(index, 1)
+    }
+}
+
+const tambah_nilai_tambah = (tw) => {
+    const item = tw_items.value.find(i => i.kode === tw)
+    const id = uuidv4()
+    if (item) {
+        item.r301b.push({ id: id, jenis_nilai_tambah: null, nilai_tambah: null })
+        item.r301b_length = item.r301a.length
+    }
+}
+
+const del_list_nilai_tambah = (tw, id) => {
+    const item = tw_items.value.find(i => i.kode === tw)
+    const index = item.r301b.findIndex(item => item.id === id)
+    if (index !== -1) {
+        item.r301b.splice(index, 1)
+    }
+}
+
+const nilai_naik_turun = ref([
+    { kode: '1', nama: '1 - Meningkat' },
+    { kode: '2', nama: '2 - Tetap' },
+    { kode: '3', nama: '3 - Turun' }
+])
+
+
+
+//blok 4
+const r401 = ref()
+
+const kirim_data = async (type) => {
+    console.log('kirim')
+}
+</script>
