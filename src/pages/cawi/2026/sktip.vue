@@ -2,6 +2,14 @@
 input {
     text-transform: uppercase;
 }
+
+.active-tab {
+    background-color: #FFE0B2 !important;
+    color: #e65100 !important;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
 </style>
 
 <template>
@@ -23,7 +31,7 @@ input {
         <v-form fast-fail @submit.prevent ref="form">
             <v-container>
                 <v-card>
-                    <v-tabs v-model="tab" bg-color="orange-darken-2">
+                    <v-tabs v-model="tab" bg-color="orange-darken-2" selected-class="active-tab">
                         <v-tab value="blok_1">Blok I</v-tab>
                         <v-tab value="blok_2">Blok II</v-tab>
                         <v-tab value="blok_3">Blok III</v-tab>
@@ -117,9 +125,9 @@ input {
                                     </v-sheet>
                                     <v-sheet class="pa-2" color="deep-orange-lighten-4">
                                         <v-tabs v-model="tw" bg-color="orange-darken-2">
-                                            <v-tab v-for="tw_item in tw_items" :value="tw_item.kode">{{
+                                            <v-tab v-for="tw_item in tw_items" :value="tw_item.kode" selected-class="active-tab">{{
                                                 tw_item.nama_singkat
-                                            }}</v-tab>
+                                                }}</v-tab>
                                         </v-tabs>
                                         <v-tabs-window v-model="tw">
                                             <v-tabs-window-item :value="tw_item.kode" v-for="tw_item in tw_items">
@@ -155,11 +163,14 @@ input {
                                                                     <v-sheet class="ma-2" color="deep-orange-lighten-4">
                                                                         <v-text-field
                                                                             v-model="r301a_item.nilai_produksi"
-                                                                            label="Nilai Produksi" type="number"
+                                                                            prefix="Rp"
+                                                                            label="Nilai Produksi" type="text"
                                                                             clearable
                                                                             append-inner-icon="mdi-information-outline"
                                                                             placeholder="Dalam Rupiah, Contoh : 900000"
-                                                                            variant="underlined"></v-text-field>
+                                                                            variant="underlined"
+                                                                            @input="formatNumber($event, r301a_item, 'nilai_produksi')"
+                                                                            ></v-text-field>
                                                                     </v-sheet>
                                                                 </v-col>
                                                                 <v-col cols="1">
@@ -193,10 +204,14 @@ input {
                                                                 <v-col cols="5">
                                                                     <v-sheet class="ma-2" color="deep-orange-lighten-4">
                                                                         <v-text-field v-model="r301b_item.nilai_tambah"
+                                                                            prefix="Rp"
+                                                                            class="text-right"
                                                                             label="Nilai Tambah" type="text" clearable
                                                                             append-inner-icon="mdi-information-outline"
                                                                             placeholder=""
-                                                                            variant="underlined"></v-text-field>
+                                                                            variant="underlined"
+                                                                            @input="formatNumber($event, r301b_item, 'nilai_tambah')"
+                                                                            ></v-text-field>
                                                                     </v-sheet>
                                                                 </v-col>
                                                                 <v-col cols="1">
@@ -211,7 +226,7 @@ input {
                                                             <v-btn class="pd-2" type="btn" block rounded="lg"
                                                                 color="deep-orange-lighten-2"
                                                                 @click="tambah_nilai_tambah(tw_item.kode)">Tambah Nilai
-                                                                Tambah</v-btn>
+                                                                Pendapatan</v-btn>
 
                                                         </v-sheet>
                                                         <br>
@@ -261,10 +276,23 @@ input {
                     </v-tabs-window>
                     <br>
                     <v-row justify="end">
-                        <v-col cols="12" sm="4">
+                        <v-col cols="12" sm="2">
                             <v-btn class="pd-2" type="submit" block rounded="lg" color="deep-orange-lighten-2"
-                                @click="kirim_data(type = 1)">Simpan</v-btn>
+                                @click="prevTab"><</v-btn>
                         </v-col>
+                        <v-col cols="12" sm="2">
+                            <v-btn class="pd-2" type="submit" block rounded="lg" color="deep-orange-lighten-2"
+                                @click="nextTab">></v-btn>
+                        </v-col>
+                        <v-col cols="12" sm="4">
+                            <v-btn class="pd-2" type="submit" block rounded="lg" color="blue-darken-3"
+                                @click="kirim_data(type = 2)">Simpan</v-btn>
+                        </v-col>
+                        <v-col cols="12" sm="4">
+                            <v-btn class="pd-2" type="submit" block rounded="lg" color="green-darken-2"
+                                @click="kirim_data(type = 1)">Kirim</v-btn>
+                        </v-col>
+                        
                     </v-row>
                 </v-card-text>
 
@@ -377,7 +405,8 @@ const del_list_nilai_tambah = (tw, id) => {
     }
 }
 
-const nilai_naik_turun = ref([
+const nilai_naik_turun = ref(
+    [
     { kode: '1', nama: '1 - Meningkat' },
     { kode: '2', nama: '2 - Tetap' },
     { kode: '3', nama: '3 - Turun' }
@@ -388,6 +417,31 @@ const nilai_naik_turun = ref([
 //blok 4
 const r401 = ref()
 
+//format pisah ribuan
+const formatNumber = (event, obj, field) => {
+  let value = event.target.value.replace(/\D/g, "")
+  obj[field] = new Intl.NumberFormat("id-ID").format(value)
+  console.log(obj[field])
+}
+
+//next tab
+const tabs = ["blok_1", "blok_2", "blok_3", "blok_4"]
+
+const prevTab = () => {
+  const index = tabs.indexOf(tab.value)
+  if (index > 0) {
+    tab.value = tabs[index - 1]
+  }
+}
+
+const nextTab = () => {
+  const index = tabs.indexOf(tab.value)
+  if (index < tabs.length - 1) {
+    tab.value = tabs[index + 1]
+  }
+}
+
+//kirim data
 const kirim_data = async (type) => {
     await form.value.validate().then(async (result) => {
         params.value.catatan = r401.value
@@ -418,7 +472,7 @@ const kirim_data = async (type) => {
                     text: response.data.message,
                     icon: "success"
                 }).then(response => {
-                    if (type) {
+                    if (type==1) {
                         router.push('/success?id=' + params.id + '&token=' + params.token + '&path=' + route.path)
                     }
                 })
@@ -526,12 +580,15 @@ onMounted(async () => {
                 //ketika mode sudah ada jawaban
                 if (response.data.data.answerKegiatan[0].answer.r101) {
                     r101.value = response.data.data.answerKegiatan[0].answer.r101
+                    onChangeProv()
                 }
                 if (response.data.data.answerKegiatan[0].answer.r102) {
                     r102.value = response.data.data.answerKegiatan[0].answer.r102
+                    onChangeKab()
                 }
                 if (response.data.data.answerKegiatan[0].answer.r103) {
                     r103.value = response.data.data.answerKegiatan[0].answer.r103
+                    onChangeKec()
                 }
                 if (response.data.data.answerKegiatan[0].answer.r104) {
                     r104.value = response.data.data.answerKegiatan[0].answer.r104
