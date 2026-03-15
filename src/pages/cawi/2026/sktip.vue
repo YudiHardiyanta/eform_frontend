@@ -64,11 +64,14 @@ input {
                                     </v-sheet>
                                     <v-sheet class="pa-2" color="deep-orange-lighten-4">
                                         <v-select v-model="r101" label="101. Provinsi *" :items=r101_items
-                                            item-title="nama" item-value="kode" variant="underlined"></v-select>
+                                            item-title="nama" item-value="kode" variant="underlined"
+                                            @update:modelValue="onChangeProv"></v-select>
                                         <v-select v-model="r102" label="102. Kabupaten/Kota *" :items=r102_items
-                                            item-title="nama" item-value="kode" variant="underlined"></v-select>
+                                            item-title="nama" item-value="kode" variant="underlined"
+                                            @update:modelValue="onChangeKab"></v-select>
                                         <v-select v-model="r103" label="103. Kecamatan *" :items=r103_items
-                                            item-title="nama" item-value="kode" variant="underlined"></v-select>
+                                            item-title="nama" item-value="kode" variant="underlined"
+                                            @update:modelValue="onChangeKec"></v-select>
                                         <v-select v-model="r104" label="104. Desa *" :items=r104_items item-title="nama"
                                             item-value="kode" variant="underlined"></v-select>
                                     </v-sheet>
@@ -98,8 +101,9 @@ input {
                                         <v-textarea v-model="r205" label="205. Tuliskan Aktivitas Perusahaan/Usaha *"
                                             variant="underlined" :disabled="mode == 'view'"></v-textarea>
                                         <v-autocomplete v-model="r205_kbli" :items="r205_kbli_items"
-                                            label="205. KBLI 2015" item-title="nama" item-value="kode" clearable
-                                            density="comfortable" variant="underlined"></v-autocomplete>
+                                            label="205. KBLI 2020" item-title="nama" item-value="kode" clearable
+                                            :loading="loading" density="comfortable" variant="underlined"
+                                            :no-filter="true" @update:search="onSearch" />
                                     </v-sheet>
                                 </v-col>
 
@@ -115,7 +119,7 @@ input {
                                         <v-tabs v-model="tw" bg-color="orange-darken-2">
                                             <v-tab v-for="tw_item in tw_items" :value="tw_item.kode">{{
                                                 tw_item.nama_singkat
-                                                }}</v-tab>
+                                            }}</v-tab>
                                         </v-tabs>
                                         <v-tabs-window v-model="tw">
                                             <v-tabs-window-item :value="tw_item.kode" v-for="tw_item in tw_items">
@@ -212,19 +216,21 @@ input {
                                                         </v-sheet>
                                                         <br>
                                                         <v-select v-model="tw_item.r302"
-                                                            label="302. Perkembangan produksi : *" :items=nilai_naik_turun
-                                                            item-title="nama" item-value="kode"
+                                                            label="302. Perkembangan produksi : *"
+                                                            :items=nilai_naik_turun item-title="nama" item-value="kode"
                                                             variant="underlined"></v-select>
                                                         <v-select v-model="tw_item.r303"
-                                                            label="303. Perkembangan pendapatan usaha : *" :items=nilai_naik_turun
-                                                            item-title="nama" item-value="kode"
+                                                            label="303. Perkembangan pendapatan usaha : *"
+                                                            :items=nilai_naik_turun item-title="nama" item-value="kode"
                                                             variant="underlined"></v-select>
-                                                        <v-text-field v-model="tw_item.r304" label="304. Persentase peningkatan/penurunan *"
+                                                        <v-text-field v-model="tw_item.r304"
+                                                            label="304. Persentase peningkatan/penurunan *"
                                                             type="number" clearable
                                                             append-inner-icon="mdi-information-outline"
                                                             variant="underlined"></v-text-field>
-                                                        
-                                                        <v-textarea v-model="tw_item.r305" label="305. Alasan peningkatan/penurunan *"
+
+                                                        <v-textarea v-model="tw_item.r305"
+                                                            label="305. Alasan peningkatan/penurunan *"
                                                             variant="underlined"
                                                             :disabled="mode == 'view'"></v-textarea>
                                                     </v-col>
@@ -269,12 +275,24 @@ input {
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
+import axios from 'axios'
+import Swal from 'sweetalert2'
+import { useRoute, useRouter } from 'vue-router';
 
-
+const apiUrl = import.meta.env.VITE_API_URL;
+const mwil_version = '2025_02'
 const tab = ref(null)
 const mode = ref('')
+
+const route = useRoute(); // Mengakses objek route saat ini
+const router = useRouter()
+const token = route.query.token
+const id = route.query.id
+const params = ref({});
+const form = ref()
+
 //blok 1
 const r101_items = ref([{ kode: '51', nama: '51 - BALI' }])
 const r101 = ref()
@@ -290,13 +308,30 @@ const r201 = ref()
 const r202 = ref()
 const r203 = ref()
 const r204 = ref()
-const r204_items = ref([{ kode: '51', nama: '51 - BALI' }])
+const r204_items = ref([
+    { kode: '01', nama: '01 - Produksi Es' },
+    { kode: '02', nama: '02 - Pengelolaan Air Limbah' },
+    { kode: '03', nama: '03 - Pengelolaan Sampah dan Daur Ulang' },
+    { kode: '04', nama: '04 - Asrama' },
+    { kode: '05', nama: '05 - Rumah Kost' },
+    { kode: '06', nama: '06 - Penyediaan Makan Minum' },
+    { kode: '07', nama: '07 - Aktv. Pemrograman, Konsultasi Komputer, dan Jasa Informasi (selain KBLI 63912)' },
+    { kode: '08', nama: '08 - Aktv. Pemrograman, Konsultasi Komputer, dan Jasa Informasi (KBLI 63912)' },
+    { kode: '09', nama: '09 - Real Estat' },
+    { kode: '10', nama: '10 - Akuntan' },
+    { kode: '11', nama: '11 - Arsitektur' },
+    { kode: '12', nama: '12 - Agen Perjalanan Wisata/Biro Perjalanan Wisata' },
+    { kode: '13', nama: '13 - SD/SLTP/SLTA' },
+    { kode: '14', nama: '14 - Klinik/Rumah Sakit Swasta' },
+    { kode: '15', nama: '15 - Tempat Rekreasi' },
+    { kode: '16', nama: '16 - Salon Kecantikan' },
+    { kode: '17', nama: '17 - Karaoke' },
+    { kode: '18', nama: '18 - Reparasi Komputer, Alat Elektronik, Furnitur' }
+])
 const r205 = ref()
 
 const r205_kbli = ref()
-const r205_kbli_items = [
-    { kode: '51', nama: '51 - BALI' }
-]
+const r205_kbli_items = ref([])
 
 //blok 3
 const tw = ref()
@@ -354,6 +389,185 @@ const nilai_naik_turun = ref([
 const r401 = ref()
 
 const kirim_data = async (type) => {
-    console.log('kirim')
+    await form.value.validate().then(async (result) => {
+        params.value.catatan = r401.value
+        params.value.status = 'draft'
+        const data = {
+            r101: r101.value,
+            r102: r102.value,
+            r103: r103.value,
+            r104: r104.value,
+            r201: r201.value,
+            r202: r202.value,
+            r203: r203.value,
+            r204: r204.value,
+            r205: r205.value,
+            r205_kbli: r205_kbli.value,
+            tw_items: tw_items.value,
+            r401: r401.value,
+        }
+        params.id = id
+        params.token = token
+        params.value.data = data
+        await axios.post(`${apiUrl}/data/cawi`, params.value, {
+
+        }).then(response => {
+            if (response.data.code == 200) {
+                Swal.fire({
+                    title: "Good job!",
+                    text: response.data.message,
+                    icon: "success"
+                }).then(response => {
+                    if (type) {
+                        router.push('/success?id=' + params.id + '&token=' + params.token + '&path=' + route.path)
+                    }
+                })
+            }
+        })
+    })
 }
+
+//proses controller kues
+//filter wilayah
+const onChangeProv = async () => {
+    await axios.get(`${apiUrl}/mwil?version=${mwil_version}&level=2`, {
+    }).then(response => {
+        const result = response.data.data.map(item => ({
+            ...item,
+            nama: `${item.kode} - ${item.nama}`
+        }))
+        r102_items.value = result
+    })
+}
+const onChangeKab = async () => {
+    await axios.get(`${apiUrl}/mwil?version=${mwil_version}&level=3&filter=${r102.value}`, {
+    }).then(response => {
+        const result = response.data.data.map(item => ({
+            ...item,
+            nama: `${item.kode} - ${item.nama}`
+        }))
+        r103_items.value = result
+    })
+}
+const onChangeKec = async () => {
+    await axios.get(`${apiUrl}/mwil?version=${mwil_version}&level=4&filter=${r103.value}`, {
+    }).then(response => {
+        const result = response.data.data.map(item => ({
+            ...item,
+            nama: `${item.kode} - ${item.nama}`
+        }))
+        r104_items.value = result
+    })
+}
+//filter KBLI
+const loading = ref(false)
+const search = ref("")
+
+const onSearch = async (val) => {
+    search.value = val
+    if (!val || val.length < 2) {
+        r205_kbli_items.value = []
+        return
+    }
+
+    loading.value = true
+    try {
+        await axios.get(`${apiUrl}/klasifikasi/kbli`, {
+            params: {
+                search: val,
+                page: 1,
+                limit: 10,
+                version: "2020"
+            }
+        }).then(response => {
+            const result = response.data.data.map(item => ({
+                kode: item.kbli_kode,
+                nama: `${item.kbli_kode} - ${item.kbli_deskripsi}`
+            }))
+            r205_kbli_items.value = result;
+        })
+
+    } catch (err) {
+        console.error(err)
+    } finally {
+        loading.value = false
+    }
+}
+
+onMounted(async () => {
+    //master prov
+    if (!id && !token) {
+        Swal.fire({
+            title: "Opps!",
+            text: "Anda mengakses halaman yang salah, silakan tekan OK!",
+            icon: "error"
+        }).then((result) => {
+            router.push('/')
+        });
+    } else {
+        await axios.get(`${apiUrl}/mwil?version=${mwil_version}&level=1`, {
+        }).then(response => {
+            const result = response.data.data.map(item => ({
+                ...item,
+                nama: `${item.kode} - ${item.nama}`
+            }))
+            r101_items.value = result
+        })
+        params.value.id = id
+        params.value.token = token
+        await axios.get(`${apiUrl}/data/cawi?id=${id}&token=${token}`, {
+        }).then(response => {
+            if (response.data.code == 200) {
+                onChangeProv()
+                r101.value = response.data.data.MProv.kode
+                r102.value = response.data.data.MKab.kode
+                onChangeKab()
+                r201.value = response.data.data.nama
+                //ketika mode sudah ada jawaban
+                if (response.data.data.answerKegiatan[0].answer.r101) {
+                    r101.value = response.data.data.answerKegiatan[0].answer.r101
+                }
+                if (response.data.data.answerKegiatan[0].answer.r102) {
+                    r102.value = response.data.data.answerKegiatan[0].answer.r102
+                }
+                if (response.data.data.answerKegiatan[0].answer.r103) {
+                    r103.value = response.data.data.answerKegiatan[0].answer.r103
+                }
+                if (response.data.data.answerKegiatan[0].answer.r104) {
+                    r104.value = response.data.data.answerKegiatan[0].answer.r104
+                }
+                if (response.data.data.answerKegiatan[0].answer.r201) {
+                    r201.value = response.data.data.answerKegiatan[0].answer.r201
+                }
+                if (response.data.data.answerKegiatan[0].answer.r202) {
+                    r202.value = response.data.data.answerKegiatan[0].answer.r202
+                }
+                if (response.data.data.answerKegiatan[0].answer.r203) {
+                    r203.value = response.data.data.answerKegiatan[0].answer.r203
+                }
+                if (response.data.data.answerKegiatan[0].answer.r204) {
+                    r204.value = response.data.data.answerKegiatan[0].answer.r204
+                }
+                if (response.data.data.answerKegiatan[0].answer.r205) {
+                    r205.value = response.data.data.answerKegiatan[0].answer.r205
+                }
+                if (response.data.data.answerKegiatan[0].answer.r205_kbli) {
+                    r205_kbli.value = response.data.data.answerKegiatan[0].answer.r205_kbli
+                }
+                if (response.data.data.answerKegiatan[0].answer.tw_items) {
+                    tw_items.value = response.data.data.answerKegiatan[0].answer.tw_items
+                }
+                if (response.data.data.answerKegiatan[0].answer.r401) {
+                    r401.value = response.data.data.answerKegiatan[0].answer.r401
+                }
+            }
+
+        })
+    }
+
+
+});
+
+
+
 </script>
