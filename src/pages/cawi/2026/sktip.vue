@@ -9,7 +9,6 @@ input {
     font-weight: bold;
     border-radius: 8px;
 }
-
 </style>
 
 <template>
@@ -34,7 +33,8 @@ input {
                     <v-tabs v-model="tab" bg-color="orange-darken-2" selected-class="active-tab">
                         <v-tab value="blok_1">Blok I</v-tab>
                         <v-tab value="blok_2">Blok II</v-tab>
-                        <v-tab value="blok_3">Blok III</v-tab>
+                        <v-tab value="blok_3">Blok III - R.301</v-tab>
+                        <v-tab value="blok_3_2">Blok III - R.302 - R.305</v-tab>
                         <v-tab value="blok_4">Blok IV</v-tab>
                     </v-tabs>
                 </v-card>
@@ -125,8 +125,9 @@ input {
                                     </v-sheet>
                                     <v-sheet class="pa-2" color="deep-orange-lighten-4">
                                         <v-tabs v-model="tw" bg-color="orange-darken-2">
-                                            <v-tab v-for="tw_item in tw_items" :value="tw_item.kode" selected-class="active-tab">{{
-                                                tw_item.nama_singkat
+                                            <v-tab v-for="tw_item in tw_items" :value="tw_item.kode"
+                                                selected-class="active-tab">{{
+                                                    tw_item.nama_singkat
                                                 }}</v-tab>
                                         </v-tabs>
                                         <v-tabs-window v-model="tw">
@@ -163,27 +164,28 @@ input {
                                                                     <v-sheet class="ma-2" color="deep-orange-lighten-4">
                                                                         <v-text-field
                                                                             v-model="r301a_item.nilai_produksi"
-                                                                            prefix="Rp"
-                                                                            label="Nilai Produksi" type="text"
-                                                                            clearable
+                                                                            prefix="Rp" label="Nilai Produksi"
+                                                                            type="text" clearable
                                                                             append-inner-icon="mdi-information-outline"
                                                                             placeholder="Dalam Rupiah, Contoh : 900000"
                                                                             variant="underlined"
-                                                                            @input="formatNumber($event, r301a_item, 'nilai_produksi')"
-                                                                            ></v-text-field>
+                                                                            @input="formatNumber($event, r301a_item, 'nilai_produksi')"></v-text-field>
                                                                     </v-sheet>
                                                                 </v-col>
                                                                 <v-col cols="1">
                                                                     <v-sheet class="pa-2 ma-2"
                                                                         color="deep-orange-lighten-4">
                                                                         <v-btn class="pd-2" type="btn" block
-                                                                            rounded="lg" color="deep-orange-lighten-2"
-                                                                            @click="del_list_produksi(tw_item.kode, r301a_item.id)">-</v-btn>
+                                                                            rounded="lg" color="red-darken-1"
+                                                                            icon="mdi-delete"
+                                                                            size="small"
+                                                                            @click="del_list_produksi(tw_item.kode, r301a_item.id)"></v-btn>
                                                                     </v-sheet>
                                                                 </v-col>
                                                             </v-row>
                                                             <v-btn class="pd-2" type="btn" block rounded="lg"
                                                                 color="deep-orange-lighten-2"
+                                                                prepend-icon="mdi-note-plus"
                                                                 @click="tambah_produksi(tw_item.kode)">Tambah Hasil
                                                                 Produksi</v-btn>
                                                             <br>
@@ -204,55 +206,60 @@ input {
                                                                 <v-col cols="5">
                                                                     <v-sheet class="ma-2" color="deep-orange-lighten-4">
                                                                         <v-text-field v-model="r301b_item.nilai_tambah"
-                                                                            prefix="Rp"
-                                                                            class="text-right"
+                                                                            prefix="Rp" class="text-right"
                                                                             label="Nilai Tambah" type="text" clearable
                                                                             append-inner-icon="mdi-information-outline"
-                                                                            placeholder=""
-                                                                            variant="underlined"
-                                                                            @input="formatNumber($event, r301b_item, 'nilai_tambah')"
-                                                                            ></v-text-field>
+                                                                            placeholder="" variant="underlined"
+                                                                            @input="formatNumber($event, r301b_item, 'nilai_tambah')"></v-text-field>
                                                                     </v-sheet>
                                                                 </v-col>
                                                                 <v-col cols="1">
                                                                     <v-sheet class="pa-2 ma-2"
                                                                         color="deep-orange-lighten-4">
                                                                         <v-btn class="pd-2" type="btn" block
-                                                                            rounded="lg" color="deep-orange-lighten-2"
-                                                                            @click="del_list_nilai_tambah(tw_item.kode, r301b_item.id)">-</v-btn>
+                                                                            rounded="lg" color="red-darken-1"
+                                                                            icon="mdi-delete" size="small"
+                                                                            @click="del_list_nilai_tambah(tw_item.kode, r301b_item.id)"></v-btn>
                                                                     </v-sheet>
                                                                 </v-col>
                                                             </v-row>
                                                             <v-btn class="pd-2" type="btn" block rounded="lg"
                                                                 color="deep-orange-lighten-2"
+                                                                prepend-icon="mdi-note-plus"
                                                                 @click="tambah_nilai_tambah(tw_item.kode)">Tambah Nilai
                                                                 Pendapatan</v-btn>
 
                                                         </v-sheet>
                                                         <br>
-                                                        <v-select v-model="tw_item.r302"
-                                                            label="302. Perkembangan produksi : *"
-                                                            :items=nilai_naik_turun item-title="nama" item-value="kode"
-                                                            variant="underlined"></v-select>
-                                                        <v-select v-model="tw_item.r303"
-                                                            label="303. Perkembangan pendapatan usaha : *"
-                                                            :items=nilai_naik_turun item-title="nama" item-value="kode"
-                                                            variant="underlined"></v-select>
-                                                        <v-text-field v-model="tw_item.r304"
-                                                            label="304. Persentase peningkatan/penurunan *"
-                                                            type="number" clearable
-                                                            append-inner-icon="mdi-information-outline"
-                                                            variant="underlined"></v-text-field>
-
-                                                        <v-textarea v-model="tw_item.r305"
-                                                            label="305. Alasan peningkatan/penurunan *"
-                                                            variant="underlined"
-                                                            :disabled="mode == 'view'"></v-textarea>
                                                     </v-col>
                                                 </v-row>
                                             </v-tabs-window-item>
 
                                         </v-tabs-window>
+                                    </v-sheet>
+                                </v-col>
+
+                            </v-row>
+                        </v-tabs-window-item>
+                        <v-tabs-window-item value="blok_3_2">
+                            <v-row no-gutters>
+                                <v-col cols="12">
+                                    <v-sheet class="pa-2" color="deep-orange-lighten-2">
+                                        <b>III. PRODUKSI DAN NILAI PRODUKSI</b>
+                                    </v-sheet>
+                                    <v-sheet class="pa-2" color="deep-orange-lighten-4">
+                                        <v-select v-model="r302" label="302. Perkembangan produksi : *"
+                                            :items=nilai_naik_turun item-title="nama" item-value="kode"
+                                            variant="underlined"></v-select>
+                                        <v-select v-model="r303" label="303. Perkembangan pendapatan usaha : *"
+                                            :items=nilai_naik_turun item-title="nama" item-value="kode"
+                                            variant="underlined"></v-select>
+                                        <v-text-field v-model="r304" label="304. Persentase peningkatan/penurunan *"
+                                            type="number" clearable append-inner-icon="mdi-information-outline"
+                                            variant="underlined"></v-text-field>
+
+                                        <v-textarea v-model="r305" label="305. Alasan peningkatan/penurunan *"
+                                            variant="underlined" :disabled="mode == 'view'"></v-textarea>
                                     </v-sheet>
                                 </v-col>
 
@@ -278,21 +285,22 @@ input {
                     <v-row justify="end">
                         <v-col cols="12" sm="2">
                             <v-btn class="pd-2" type="submit" block rounded="lg" color="deep-orange-lighten-2"
-                                @click="prevTab"><</v-btn>
+                                @click="prevTab" prepend-icon="mdi-skip-previous" >
+                            </v-btn>
                         </v-col>
                         <v-col cols="12" sm="2">
                             <v-btn class="pd-2" type="submit" block rounded="lg" color="deep-orange-lighten-2"
-                                @click="nextTab">></v-btn>
+                                @click="nextTab" prepend-icon="mdi-skip-next" ></v-btn>
                         </v-col>
                         <v-col cols="12" sm="4">
                             <v-btn class="pd-2" type="submit" block rounded="lg" color="blue-darken-3"
-                                @click="kirim_data(type = 2)">Simpan</v-btn>
+                                @click="kirim_data(type = 2)" prepend-icon="mdi-content-save" >Simpan</v-btn>
                         </v-col>
                         <v-col cols="12" sm="4">
                             <v-btn class="pd-2" type="submit" block rounded="lg" color="green-darken-2"
-                                @click="kirim_data(type = 1)">Kirim</v-btn>
+                                @click="kirim_data(type = 1)" prepend-icon="mdi-send" >Kirim</v-btn>
                         </v-col>
-                        
+
                     </v-row>
                 </v-card-text>
 
@@ -324,11 +332,11 @@ const form = ref()
 //blok 1
 const r101_items = ref([{ kode: '51', nama: '51 - BALI' }])
 const r101 = ref()
-const r102_items = ref([{ kode: '51', nama: '51 - BALI' }])
+const r102_items = ref([])
 const r102 = ref()
-const r103_items = ref([{ kode: '51', nama: '51 - BALI' }])
+const r103_items = ref([])
 const r103 = ref()
-const r104_items = ref([{ kode: '51', nama: '51 - BALI' }])
+const r104_items = ref([])
 const r104 = ref()
 
 //blok 2
@@ -354,7 +362,7 @@ const r204_items = ref([
     { kode: 'P', nama: 'P - Jasa Pendidikan' },
     { kode: 'Q', nama: 'Q - Jasa Kesehatan dan Kegiatan Sosial' },
     { kode: 'R,S,T,U', nama: 'R,S,T,U - Jasa lainnya' },
-    
+
 ])
 const r205 = ref()
 
@@ -364,13 +372,15 @@ const r205_kbli_items = ref([])
 //blok 3
 const tw = ref()
 const tw_items = ref([
-    { kode: '202501', nama_singkat: '2025 TW I', nama_lengkap: '2025 Triwulan I', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0, r302: null, r303: null, r304: null, r305: null },
-    { kode: '202502', nama_singkat: '2025 TW II', nama_lengkap: '2025 Triwulan II', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0, r302: null, r303: null, r304: null, r305: null },
-    { kode: '202503', nama_singkat: '2025 TW III', nama_lengkap: '2025 Triwulan III', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0, r302: null, r303: null, r304: null, r305: null },
-    { kode: '202504', nama_singkat: '2025 TW IV', nama_lengkap: '2025 Triwulan IV', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0, r302: null, r303: null, r304: null, r305: null },
-    { kode: '202601', nama_singkat: '2026 TW I', nama_lengkap: '2026 Triwulan I', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0, r302: null, r303: null, r304: null, r305: null },
+    { kode: '202601', nama_singkat: '2026 TW I', nama_lengkap: '2026 Triwulan I', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0},
+    { kode: '202504', nama_singkat: '2025 TW IV', nama_lengkap: '2025 Triwulan IV', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0},
+    { kode: '202501', nama_singkat: '2025 TW I', nama_lengkap: '2025 Triwulan I', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0},
 ])
-const r301 = ref()
+
+const r302 = ref()
+const r303 = ref()
+const r304 = ref()
+const r305 = ref()
 const tambah_produksi = (tw) => {
     const item = tw_items.value.find(i => i.kode === tw)
     const id = uuidv4()
@@ -407,10 +417,10 @@ const del_list_nilai_tambah = (tw, id) => {
 
 const nilai_naik_turun = ref(
     [
-    { kode: '1', nama: '1 - Meningkat' },
-    { kode: '2', nama: '2 - Tetap' },
-    { kode: '3', nama: '3 - Turun' }
-])
+        { kode: '1', nama: '1 - Meningkat' },
+        { kode: '2', nama: '2 - Tetap' },
+        { kode: '3', nama: '3 - Turun' }
+    ])
 
 
 
@@ -419,33 +429,39 @@ const r401 = ref()
 
 //format pisah ribuan
 const formatNumber = (event, obj, field) => {
-  let value = event.target.value.replace(/\D/g, "")
-  obj[field] = new Intl.NumberFormat("id-ID").format(value)
-  console.log(obj[field])
+    let value = event.target.value.replace(/\D/g, "")
+    obj[field] = new Intl.NumberFormat("id-ID").format(value)
+    console.log(obj[field])
 }
 
 //next tab
 const tabs = ["blok_1", "blok_2", "blok_3", "blok_4"]
 
 const prevTab = () => {
-  const index = tabs.indexOf(tab.value)
-  if (index > 0) {
-    tab.value = tabs[index - 1]
-  }
+    const index = tabs.indexOf(tab.value)
+    if (index > 0) {
+        tab.value = tabs[index - 1]
+    }
 }
 
 const nextTab = () => {
-  const index = tabs.indexOf(tab.value)
-  if (index < tabs.length - 1) {
-    tab.value = tabs[index + 1]
-  }
+    const index = tabs.indexOf(tab.value)
+    if (index < tabs.length - 1) {
+        tab.value = tabs[index + 1]
+    }
 }
 
 //kirim data
 const kirim_data = async (type) => {
     await form.value.validate().then(async (result) => {
         params.value.catatan = r401.value
-        params.value.status = 'draft'
+        if(type=='2'){
+            params.value.status = 'draft'
+        }
+        if(type=='1'){
+            params.value.status = 'submit'
+        }
+        
         const data = {
             r101: r101.value,
             r102: r102.value,
@@ -458,6 +474,10 @@ const kirim_data = async (type) => {
             r205: r205.value,
             r205_kbli: r205_kbli.value,
             tw_items: tw_items.value,
+            r302: r302.value,
+            r303: r303.value,
+            r304: r304.value,
+            r305: r305.value,
             r401: r401.value,
         }
         params.id = id
@@ -472,7 +492,7 @@ const kirim_data = async (type) => {
                     text: response.data.message,
                     icon: "success"
                 }).then(response => {
-                    if (type==1) {
+                    if (type == 1) {
                         router.push('/success?id=' + params.id + '&token=' + params.token + '&path=' + route.path)
                     }
                 })
@@ -613,6 +633,18 @@ onMounted(async () => {
                 }
                 if (response.data.data.answerKegiatan[0].answer.tw_items) {
                     tw_items.value = response.data.data.answerKegiatan[0].answer.tw_items
+                }
+                if (response.data.data.answerKegiatan[0].answer.r302) {
+                    r302.value = response.data.data.answerKegiatan[0].answer.r302
+                }
+                if (response.data.data.answerKegiatan[0].answer.r303) {
+                    r303.value = response.data.data.answerKegiatan[0].answer.r303
+                }
+                if (response.data.data.answerKegiatan[0].answer.r304) {
+                    r304.value = response.data.data.answerKegiatan[0].answer.r304
+                }
+                if (response.data.data.answerKegiatan[0].answer.r305) {
+                    r305.value = response.data.data.answerKegiatan[0].answer.r305
                 }
                 if (response.data.data.answerKegiatan[0].answer.r401) {
                     r401.value = response.data.data.answerKegiatan[0].answer.r401
