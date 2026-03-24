@@ -337,24 +337,24 @@ const r202 = ref()
 const r203 = ref()
 const r204 = ref()
 const r204_items = ref([
-    { kode: '01', nama: '01 - Produksi Es' },
-    { kode: '02', nama: '02 - Pengelolaan Air Limbah' },
-    { kode: '03', nama: '03 - Pengelolaan Sampah dan Daur Ulang' },
-    { kode: '04', nama: '04 - Asrama' },
-    { kode: '05', nama: '05 - Rumah Kost' },
-    { kode: '06', nama: '06 - Penyediaan Makan Minum' },
-    { kode: '07', nama: '07 - Aktv. Pemrograman, Konsultasi Komputer, dan Jasa Informasi (selain KBLI 63912)' },
-    { kode: '08', nama: '08 - Aktv. Pemrograman, Konsultasi Komputer, dan Jasa Informasi (KBLI 63912)' },
-    { kode: '09', nama: '09 - Real Estat' },
-    { kode: '10', nama: '10 - Akuntan' },
-    { kode: '11', nama: '11 - Arsitektur' },
-    { kode: '12', nama: '12 - Agen Perjalanan Wisata/Biro Perjalanan Wisata' },
-    { kode: '13', nama: '13 - SD/SLTP/SLTA' },
-    { kode: '14', nama: '14 - Klinik/Rumah Sakit Swasta' },
-    { kode: '15', nama: '15 - Tempat Rekreasi' },
-    { kode: '16', nama: '16 - Salon Kecantikan' },
-    { kode: '17', nama: '17 - Karaoke' },
-    { kode: '18', nama: '18 - Reparasi Komputer, Alat Elektronik, Furnitur' }
+    { kode: 'A', nama: 'A - Pertanian, Kehutanan, dan Perikanan' },
+    { kode: 'B', nama: 'B - Pertambangan dan Penggalian' },
+    { kode: 'C', nama: 'C - Industri Pengolahan' },
+    { kode: 'D', nama: 'D - Pengadaan Listrik dan Gas' },
+    { kode: 'E', nama: 'E - Pengadaan Air, Pengelolaan Sampah, Limbah dan Daur Ulang' },
+    { kode: 'F', nama: 'F - Konstruksi' },
+    { kode: 'G', nama: 'G - Perdagangan Besar dan Eceran; Reparasi Mobil dan Sepeda Motor' },
+    { kode: 'H', nama: 'H - Transportasi dan Pergudangan' },
+    { kode: 'I', nama: 'I - Penyediaan Akomodasi dan Makan Minum' },
+    { kode: 'J', nama: 'J - Informasi dan Komunikasi' },
+    { kode: 'K', nama: 'K - Jasa Keuangan dan Asuransi' },
+    { kode: 'L', nama: 'L - Real Estat' },
+    { kode: 'M,N', nama: 'M,N - Jasa Perusahaan' },
+    { kode: 'O', nama: 'O - Administrasi Pemerintahan, Pertahanan dan Jaminan Sosial Wajib' },
+    { kode: 'P', nama: 'P - Jasa Pendidikan' },
+    { kode: 'Q', nama: 'Q - Jasa Kesehatan dan Kegiatan Sosial' },
+    { kode: 'R,S,T,U', nama: 'R,S,T,U - Jasa lainnya' },
+    
 ])
 const r205 = ref()
 
