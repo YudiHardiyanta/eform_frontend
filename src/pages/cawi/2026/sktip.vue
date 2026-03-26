@@ -145,7 +145,7 @@ input {
                                                                 <v-col cols="4">
                                                                     <v-sheet class="ma-2" color="deep-orange-lighten-4">
                                                                         <v-text-field v-model="r301a_item.produksi"
-                                                                            label="Produksi" type="text" clearable
+                                                                            label="Jenis Barang/Jasa" type="text" clearable
                                                                             append-inner-icon="mdi-information-outline"
                                                                             placeholder="Contoh : "
                                                                             variant="underlined"></v-text-field>
@@ -164,7 +164,7 @@ input {
                                                                     <v-sheet class="ma-2" color="deep-orange-lighten-4">
                                                                         <v-text-field
                                                                             v-model="r301a_item.nilai_produksi"
-                                                                            prefix="Rp" label="Nilai Produksi"
+                                                                            prefix="Rp" label="Volume Produksi"
                                                                             type="text" clearable
                                                                             append-inner-icon="mdi-information-outline"
                                                                             placeholder="Dalam Rupiah, Contoh : 900000"
@@ -195,8 +195,8 @@ input {
                                                                 <v-col cols="6">
                                                                     <v-sheet class="ma-2" color="deep-orange-lighten-4">
                                                                         <v-text-field
-                                                                            v-model="r301b_item.jenis_nilai_tambah"
-                                                                            label="Jenis Nilai Tambah" type="text"
+                                                                            v-model="r301b_item.jenis_nilai_pendapatan"
+                                                                            label="Jenis Barang/Jasa" type="text"
                                                                             clearable
                                                                             append-inner-icon="mdi-information-outline"
                                                                             placeholder="Contoh : "
@@ -205,12 +205,12 @@ input {
                                                                 </v-col>
                                                                 <v-col cols="5">
                                                                     <v-sheet class="ma-2" color="deep-orange-lighten-4">
-                                                                        <v-text-field v-model="r301b_item.nilai_tambah"
+                                                                        <v-text-field v-model="r301b_item.nilai_pendapatan"
                                                                             prefix="Rp" class="text-right"
-                                                                            label="Nilai Tambah" type="text" clearable
+                                                                            label="Nilai Pendapatan" type="text" clearable
                                                                             append-inner-icon="mdi-information-outline"
                                                                             placeholder="" variant="underlined"
-                                                                            @input="formatNumber($event, r301b_item, 'nilai_tambah')"></v-text-field>
+                                                                            @input="formatNumber($event, r301b_item, 'nilai_pendapatan')"></v-text-field>
                                                                     </v-sheet>
                                                                 </v-col>
                                                                 <v-col cols="1">
@@ -219,14 +219,14 @@ input {
                                                                         <v-btn class="pd-2" type="btn" block
                                                                             rounded="lg" color="red-darken-1"
                                                                             icon="mdi-delete" size="small"
-                                                                            @click="del_list_nilai_tambah(tw_item.kode, r301b_item.id)"></v-btn>
+                                                                            @click="del_list_nilai_pendapatan(tw_item.kode, r301b_item.id)"></v-btn>
                                                                     </v-sheet>
                                                                 </v-col>
                                                             </v-row>
                                                             <v-btn class="pd-2" type="btn" block rounded="lg"
                                                                 color="deep-orange-lighten-2"
                                                                 prepend-icon="mdi-note-plus"
-                                                                @click="tambah_nilai_tambah(tw_item.kode)">Tambah Nilai
+                                                                @click="tambah_nilai_pendapatan(tw_item.kode)">Tambah Nilai
                                                                 Pendapatan</v-btn>
 
                                                         </v-sheet>
@@ -398,16 +398,16 @@ const del_list_produksi = (tw, id) => {
     }
 }
 
-const tambah_nilai_tambah = (tw) => {
+const tambah_nilai_pendapatan = (tw) => {
     const item = tw_items.value.find(i => i.kode === tw)
     const id = uuidv4()
     if (item) {
-        item.r301b.push({ id: id, jenis_nilai_tambah: null, nilai_tambah: null })
+        item.r301b.push({ id: id, jenis_nilai_pendapatan: null, nilai_pendapatan: null })
         item.r301b_length = item.r301a.length
     }
 }
 
-const del_list_nilai_tambah = (tw, id) => {
+const del_list_nilai_pendapatan = (tw, id) => {
     const item = tw_items.value.find(i => i.kode === tw)
     const index = item.r301b.findIndex(item => item.id === id)
     if (index !== -1) {
@@ -435,7 +435,7 @@ const formatNumber = (event, obj, field) => {
 }
 
 //next tab
-const tabs = ["blok_1", "blok_2", "blok_3", "blok_4"]
+const tabs = ["blok_1", "blok_2", "blok_3","blok_3_2", "blok_4"]
 
 const prevTab = () => {
     const index = tabs.indexOf(tab.value)
