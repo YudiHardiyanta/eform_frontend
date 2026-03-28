@@ -139,7 +139,7 @@ input {
                                                         </v-sheet>
                                                         <br>
                                                         <v-sheet class="pa-2" color="deep-orange-lighten-4">
-                                                            <span>301.a Produksi Perusahaan/Usaha
+                                                            <span>301.a Produk Barang/Jasa
                                                                 :*</span>
                                                             <v-row no-gutters v-for="r301a_item in tw_item.r301a">
                                                                 <v-col cols="4">
