@@ -139,37 +139,43 @@ input {
                                                         </v-sheet>
                                                         <br>
                                                         <v-sheet class="pa-2" color="deep-orange-lighten-4">
-                                                            <span>301.a Produk Barang/Jasa
+                                                            <span>301. Produk Barang/Jasa
                                                                 :*</span>
-                                                            <v-row no-gutters v-for="r301a_item in tw_item.r301a">
-                                                                <v-col cols="4">
+                                                            <v-row no-gutters v-for="r301_item in tw_item.r301">
+                                                                <v-col cols="3">
                                                                     <v-sheet class="ma-2" color="deep-orange-lighten-4">
-                                                                        <v-text-field v-model="r301a_item.produksi"
+                                                                        <v-text-field v-model="r301_item.produksi"
                                                                             label="Jenis Barang/Jasa" type="text" clearable
-                                                                            append-inner-icon="mdi-information-outline"
                                                                             placeholder="Contoh : "
+                                                                            variant="underlined"></v-text-field>
+                                                                    </v-sheet>
+                                                                </v-col>
+                                                                <v-col cols="2">
+                                                                    <v-sheet class="ma-2" color="deep-orange-lighten-4">
+                                                                        <v-text-field v-model="r301_item.satuan"
+                                                                            label="Satuan" type="text" clearable
+                                                                            placeholder=""
                                                                             variant="underlined"></v-text-field>
                                                                     </v-sheet>
                                                                 </v-col>
                                                                 <v-col cols="3">
                                                                     <v-sheet class="ma-2" color="deep-orange-lighten-4">
-                                                                        <v-text-field v-model="r301a_item.satuan"
-                                                                            label="Satuan" type="text" clearable
-                                                                            append-inner-icon="mdi-information-outline"
-                                                                            placeholder=""
-                                                                            variant="underlined"></v-text-field>
+                                                                        <v-text-field
+                                                                            v-model="r301_item.nilai_produksi"
+                                                                            :suffix="r301_item.satuan" label="Volume Produksi"
+                                                                            type="text" clearable
+                                                                            placeholder="Volume Produksi" class="text-right"
+                                                                            variant="underlined"
+                                                                            @input="formatNumber($event, r301_item, 'nilai_produksi')"></v-text-field>
                                                                     </v-sheet>
                                                                 </v-col>
-                                                                <v-col cols="4">
+                                                                <v-col cols="3">
                                                                     <v-sheet class="ma-2" color="deep-orange-lighten-4">
-                                                                        <v-text-field
-                                                                            v-model="r301a_item.nilai_produksi"
-                                                                            prefix="Rp" label="Volume Produksi"
-                                                                            type="text" clearable
-                                                                            append-inner-icon="mdi-information-outline"
-                                                                            placeholder="Dalam Rupiah, Contoh : 900000"
-                                                                            variant="underlined"
-                                                                            @input="formatNumber($event, r301a_item, 'nilai_produksi')"></v-text-field>
+                                                                        <v-text-field v-model="r301_item.nilai_pendapatan"
+                                                                            prefix="Rp" class="text-right"
+                                                                            label="Nilai Pendapatan" type="text" clearable
+                                                                            placeholder="" variant="underlined"
+                                                                            @input="formatNumber($event, r301_item, 'nilai_pendapatan')"></v-text-field>
                                                                     </v-sheet>
                                                                 </v-col>
                                                                 <v-col cols="1">
@@ -179,7 +185,7 @@ input {
                                                                             rounded="lg" color="red-darken-1"
                                                                             icon="mdi-delete"
                                                                             size="small"
-                                                                            @click="del_list_produksi(tw_item.kode, r301a_item.id)"></v-btn>
+                                                                            @click="del_list_produksi(tw_item.kode, r301_item.id)"></v-btn>
                                                                     </v-sheet>
                                                                 </v-col>
                                                             </v-row>
@@ -189,46 +195,6 @@ input {
                                                                 @click="tambah_produksi(tw_item.kode)">Tambah Hasil
                                                                 Produksi</v-btn>
                                                             <br>
-                                                            <span>301.b Nilai Pendapatan (Rupiah)
-                                                                :*</span>
-                                                            <v-row no-gutters v-for="r301b_item in tw_item.r301b">
-                                                                <v-col cols="6">
-                                                                    <v-sheet class="ma-2" color="deep-orange-lighten-4">
-                                                                        <v-text-field
-                                                                            v-model="r301b_item.jenis_nilai_pendapatan"
-                                                                            label="Jenis Barang/Jasa" type="text"
-                                                                            clearable
-                                                                            append-inner-icon="mdi-information-outline"
-                                                                            placeholder="Contoh : "
-                                                                            variant="underlined"></v-text-field>
-                                                                    </v-sheet>
-                                                                </v-col>
-                                                                <v-col cols="5">
-                                                                    <v-sheet class="ma-2" color="deep-orange-lighten-4">
-                                                                        <v-text-field v-model="r301b_item.nilai_pendapatan"
-                                                                            prefix="Rp" class="text-right"
-                                                                            label="Nilai Pendapatan" type="text" clearable
-                                                                            append-inner-icon="mdi-information-outline"
-                                                                            placeholder="" variant="underlined"
-                                                                            @input="formatNumber($event, r301b_item, 'nilai_pendapatan')"></v-text-field>
-                                                                    </v-sheet>
-                                                                </v-col>
-                                                                <v-col cols="1">
-                                                                    <v-sheet class="pa-2 ma-2"
-                                                                        color="deep-orange-lighten-4">
-                                                                        <v-btn class="pd-2" type="btn" block
-                                                                            rounded="lg" color="red-darken-1"
-                                                                            icon="mdi-delete" size="small"
-                                                                            @click="del_list_nilai_pendapatan(tw_item.kode, r301b_item.id)"></v-btn>
-                                                                    </v-sheet>
-                                                                </v-col>
-                                                            </v-row>
-                                                            <v-btn class="pd-2" type="btn" block rounded="lg"
-                                                                color="deep-orange-lighten-2"
-                                                                prepend-icon="mdi-note-plus"
-                                                                @click="tambah_nilai_pendapatan(tw_item.kode)">Tambah Nilai
-                                                                Pendapatan</v-btn>
-
                                                         </v-sheet>
                                                         <br>
                                                     </v-col>
@@ -248,10 +214,10 @@ input {
                                         <b>III. PRODUKSI DAN NILAI PRODUKSI</b>
                                     </v-sheet>
                                     <v-sheet class="pa-2" color="deep-orange-lighten-4">
-                                        <v-select v-model="r302" label="302. Perkembangan produksi : *"
+                                        <v-select v-model="r302" label="302. Perkembangan Produksi dibandingkan Triwulan Sebelumnya : *"
                                             :items=nilai_naik_turun item-title="nama" item-value="kode"
                                             variant="underlined"></v-select>
-                                        <v-select v-model="r303" label="303. Perkembangan pendapatan usaha : *"
+                                        <v-select v-model="r303" label="303. Perkembangan Pendapatan Usaha Dibandingkan Triwulan Sebelumnya : *"
                                             :items=nilai_naik_turun item-title="nama" item-value="kode"
                                             variant="underlined"></v-select>
                                         <v-text-field v-model="r304" label="304. Persentase peningkatan/penurunan *"
@@ -372,9 +338,9 @@ const r205_kbli_items = ref([])
 //blok 3
 const tw = ref()
 const tw_items = ref([
-    { kode: '202601', nama_singkat: '2026 TW I', nama_lengkap: '2026 Triwulan I', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0},
-    { kode: '202504', nama_singkat: '2025 TW IV', nama_lengkap: '2025 Triwulan IV', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0},
-    { kode: '202501', nama_singkat: '2025 TW I', nama_lengkap: '2025 Triwulan I', r301a: [], r301b: [], r301a_length: 0, r301b_length: 0},
+    { kode: '202601', nama_singkat: '2026 TW I', nama_lengkap: '2026 Triwulan I', r301: [],  r301_length: 0},
+    { kode: '202504', nama_singkat: '2025 TW IV', nama_lengkap: '2025 Triwulan IV', r301: [],  r301_length: 0},
+    { kode: '202501', nama_singkat: '2025 TW I', nama_lengkap: '2025 Triwulan I', r301: [],  r301_length: 0},
 ])
 
 const r302 = ref()
@@ -385,35 +351,19 @@ const tambah_produksi = (tw) => {
     const item = tw_items.value.find(i => i.kode === tw)
     const id = uuidv4()
     if (item) {
-        item.r301a.push({ id: id, produksi: null, satuan: null, nilai_produksi: null })
-        item.r301a_length = item.r301a.length
+        item.r301.push({ id: id, produksi: null, satuan: null, nilai_produksi: null ,nilai_pendapatan: null})
+        item.r301_length = item.r301.length
     }
 }
 
 const del_list_produksi = (tw, id) => {
     const item = tw_items.value.find(i => i.kode === tw)
-    const index = item.r301a.findIndex(item => item.id === id)
+    const index = item.r301.findIndex(item => item.id === id)
     if (index !== -1) {
-        item.r301a.splice(index, 1)
+        item.r301.splice(index, 1)
     }
 }
 
-const tambah_nilai_pendapatan = (tw) => {
-    const item = tw_items.value.find(i => i.kode === tw)
-    const id = uuidv4()
-    if (item) {
-        item.r301b.push({ id: id, jenis_nilai_pendapatan: null, nilai_pendapatan: null })
-        item.r301b_length = item.r301a.length
-    }
-}
-
-const del_list_nilai_pendapatan = (tw, id) => {
-    const item = tw_items.value.find(i => i.kode === tw)
-    const index = item.r301b.findIndex(item => item.id === id)
-    if (index !== -1) {
-        item.r301b.splice(index, 1)
-    }
-}
 
 const nilai_naik_turun = ref(
     [
