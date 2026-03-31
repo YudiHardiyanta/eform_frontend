@@ -24,7 +24,7 @@ input {
         <template v-slot:append>
             <v-img :width="60" aspect-ratio="1/1" cover rounded src="/pem_bali.png"></v-img>
         </template>
-        <v-app-bar-title>SURVEI KHUSUS TRIWULANAN INDIKATOR PRODUKSI 2026</v-app-bar-title>
+        <v-app-bar-title>Pendataan Perusahaan Triwulanan 2026</v-app-bar-title>
     </v-app-bar>
     <v-sheet class="mx-auto" style="min-height:85vh">
         <v-form fast-fail @submit.prevent ref="form">
@@ -173,7 +173,7 @@ input {
                                                                     <v-sheet class="ma-2" color="deep-orange-lighten-4">
                                                                         <v-text-field v-model="r301_item.nilai_pendapatan"
                                                                             prefix="Rp" class="text-right"
-                                                                            label="Nilai Pendapatan" type="text" clearable
+                                                                            label="Nilai Produksi/Pendapatan" type="text" clearable
                                                                             placeholder="" variant="underlined"
                                                                             @input="formatNumber($event, r301_item, 'nilai_pendapatan')"></v-text-field>
                                                                     </v-sheet>
